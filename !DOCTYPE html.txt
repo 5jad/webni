@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>استمارة طلب مشروع | Webni ويبني</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--surface:#151820;--card:#1c2030;--border:#252a3a;
+  --accent:#4f7cff;--accent2:#00d4aa;--gold:#f5b942;--red:#ff5c5c;
+  --text:#e8eaf2;--muted:#6b7280;--label:#9ca3af;--radius:12px;
+}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:0 0 80px}
+header{background:linear-gradient(135deg,#0d0f14,#131729 60%,#0d1229);border-bottom:1px solid var(--border);padding:34px 24px 28px;text-align:center;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(79,124,255,.12),transparent 70%);pointer-events:none}
+.badge{display:inline-block;background:rgba(79,124,255,.12);border:1px solid rgba(79,124,255,.3);color:var(--accent);font-size:11px;font-weight:700;letter-spacing:1px;padding:4px 14px;border-radius:20px;margin-bottom:14px}
+header h1{font-size:clamp(20px,5vw,34px);font-weight:800;color:#fff;line-height:1.25;margin-bottom:8px}
+header h1 span{color:var(--accent)}
+header p{color:var(--muted);font-size:13px;max-width:520px;margin:0 auto;line-height:1.6}
+.progress-bar{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:9px 18px;display:flex;align-items:center;gap:10px}
+.progress-track{flex:1;height:4px;background:var(--border);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .4s ease;width:0%}
+.progress-label{font-size:11px;color:var(--muted);white-space:nowrap}
+.steps-nav{display:flex;gap:5px;padding:14px 14px 0;overflow-x:auto;max-width:960px;margin:0 auto;scrollbar-width:none}
+.steps-nav::-webkit-scrollbar{display:none}
+.step-pill{flex:1;min-width:68px;text-align:center;padding:6px 4px;border-radius:7px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--muted);transition:all .2s;white-space:nowrap}
+.step-pill.active{background:rgba(79,124,255,.15);border-color:var(--accent);color:var(--accent)}
+.step-pill.done{background:rgba(0,212,170,.1);border-color:var(--accent2);color:var(--accent2)}
+.step-pill .si{display:block;font-size:14px;margin-bottom:1px}
+.form-container{max-width:960px;margin:18px auto 0;padding:0 12px}
+.section{display:none;animation:fadeIn .3s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sec-hdr{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+.sec-ico{width:40px;height:40px;background:rgba(79,124,255,.12);border:1px solid rgba(79,124,255,.25);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sec-title{font-size:18px;font-weight:700;color:#fff}
+.sec-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.card-title{font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:12px;display:flex;align-items:center;gap:5px}
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+label{display:block;font-size:12px;font-weight:600;color:var(--label);margin-bottom:5px}
+label .req{color:var(--accent);margin-right:2px}
+label .hint{font-weight:400;color:var(--muted);font-size:11px;margin-right:4px}
+input[type=text],input[type=email],input[type=tel],input[type=number],select,textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:8px 12px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:13px;transition:border-color .2s,box-shadow .2s;outline:none;appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,124,255,.1)}
+textarea{resize:vertical;min-height:80px;line-height:1.6}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:560px){.grid-2{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:5px 12px;border-radius:18px;border:1px solid var(--border);background:var(--surface);color:var(--label);font-size:11px;font-family:'Tajawal',sans-serif;cursor:pointer;transition:all .2s;user-select:none}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.selected{background:rgba(79,124,255,.15);border-color:var(--accent);color:var(--accent);font-weight:700}
+.chip.multi.selected{background:rgba(0,212,170,.1);border-color:var(--accent2);color:var(--accent2)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-info{flex:1}
+.toggle-info strong{font-size:12px;color:var(--text)}
+.toggle-info small{display:block;font-size:10px;color:var(--muted);margin-top:1px}
+.toggle-info .price-add{font-size:11px;color:var(--gold);font-weight:700;margin-right:6px}
+.toggle{position:relative;width:36px;height:20px;flex-shrink:0;margin-right:8px}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:20px;cursor:pointer;transition:background .2s}
+.toggle-slider::before{content:'';position:absolute;width:14px;height:14px;top:3px;right:3px;background:#fff;border-radius:50%;transition:transform .2s}
+.toggle input:checked+.toggle-slider{background:var(--accent)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(-16px)}
+.tip{background:rgba(79,124,255,.07);border:1px solid rgba(79,124,255,.18);border-radius:7px;padding:8px 12px;margin-bottom:12px;display:flex;gap:6px}
+.tip p{font-size:11px;color:#8ba4ff;line-height:1.5}
+.guide-box{background:rgba(245,185,66,.06);border:1px solid rgba(245,185,66,.2);border-radius:7px;padding:11px 13px;margin-bottom:12px}
+.guide-box h4{font-size:11px;font-weight:700;color:var(--gold);margin-bottom:7px}
+.guide-item{display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-bottom:1px solid rgba(245,185,66,.1)}
+.guide-item:last-child{border-bottom:none}
+.guide-item span{color:var(--muted)}
+.guide-item strong{color:var(--gold)}
+.btn-row{display:flex;gap:8px;margin-top:18px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.btn{padding:9px 20px;border-radius:7px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--label)}
+.btn-outline:hover{border-color:var(--muted);color:var(--text)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(79,124,255,.3)}
+.btn-primary:hover{background:#3d6be8}
+.btn-success{background:var(--accent2);color:#0d0f14}
+.btn-gold{background:var(--gold);color:#0d0f14}
+.btn-sm{padding:6px 12px;font-size:11px}
+.error-msg{color:var(--red);font-size:10px;margin-top:3px;display:none}
+.field.has-error input,.field.has-error textarea,.field.has-error select{border-color:var(--red)}
+.field.has-error .error-msg{display:block}
+.cur-switcher{display:flex;border-radius:7px;overflow:hidden;border:1px solid var(--border);width:fit-content;margin-bottom:14px}
+.cur-btn{padding:6px 18px;font-family:'Tajawal',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;background:var(--surface);color:var(--muted);transition:all .2s}
+.cur-btn.active{background:var(--accent);color:#fff}
+.price-meter{background:linear-gradient(135deg,#111420,#1a1f35);border:1px solid rgba(79,124,255,.3);border-radius:12px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden}
+.price-meter::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;background:radial-gradient(circle,rgba(79,124,255,.15),transparent 70%);pointer-events:none}
+.pm-label{font-size:11px;color:var(--muted);margin-bottom:4px}
+.pm-total{font-size:36px;font-weight:800;color:var(--accent2);line-height:1;margin-bottom:2px;transition:all .3s}
+.pm-sub{font-size:11px;color:var(--muted)}
+.pm-bar{height:3px;background:var(--border);border-radius:3px;margin:12px 0 8px;overflow:hidden}
+.pm-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width .5s ease;width:0%}
+.pm-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.pm-item{background:rgba(255,255,255,.04);border-radius:6px;padding:7px 10px;display:flex;justify-content:space-between;align-items:center}
+.pm-item-label{font-size:10px;color:var(--muted)}
+.pm-item-val{font-size:11px;font-weight:700;color:var(--text)}
+.pm-item-val.pos{color:var(--accent2)}
+.pm-item-val.neg{color:#ff8c69}
+.price-edit-wrap{margin-top:0}
+.price-edit-label{font-size:11px;color:var(--label);margin-bottom:6px;font-weight:600}
+.price-edit-row{display:flex;gap:8px;align-items:center}
+.price-edit-input{flex:1;font-size:18px;font-weight:700;text-align:center;color:var(--gold) !important;border-color:rgba(245,185,66,.3) !important}
+.price-edit-input:focus{border-color:var(--gold) !important;box-shadow:0 0 0 3px rgba(245,185,66,.1) !important}
+.price-recalc-btn{padding:8px 14px;background:rgba(245,185,66,.15);border:1px solid rgba(245,185,66,.3);color:var(--gold);border-radius:7px;cursor:pointer;font-size:11px;font-family:'Tajawal',sans-serif;font-weight:700;white-space:nowrap;transition:all .2s}
+.price-recalc-btn:hover{background:rgba(245,185,66,.25)}
+.price-recalc-btn.blue{background:rgba(79,124,255,.15);border-color:rgba(79,124,255,.3);color:var(--accent)}
+.addon-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:7px;margin-bottom:6px;transition:all .2s;cursor:pointer}
+.addon-item:hover{border-color:var(--accent2)}
+.addon-item.active-addon{border-color:var(--accent2);background:rgba(0,212,170,.06)}
+.addon-left{display:flex;align-items:center;gap:8px}
+.addon-icon{font-size:16px}
+.addon-name{font-size:12px;color:var(--text);font-weight:600}
+.addon-desc{font-size:10px;color:var(--muted)}
+.addon-price{font-size:12px;font-weight:700;color:var(--gold);white-space:nowrap;margin:0 8px}
+.addon-check{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .2s;flex-shrink:0}
+.addon-item.active-addon .addon-check{background:var(--accent2);border-color:var(--accent2);color:#0d0f14}
+.discount-row{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.discount-input{max-width:80px;text-align:center}
+.discount-type{display:flex;border-radius:6px;overflow:hidden;border:1px solid var(--border)}
+.disc-btn{padding:5px 10px;font-size:11px;font-family:'Tajawal',sans-serif;cursor:pointer;border:none;background:var(--surface);color:var(--muted)}
+.disc-btn.active{background:var(--red);color:#fff}
+.qp-box{background:var(--surface);border-radius:7px;padding:10px;text-align:center}
+.qp-name{font-size:10px;color:var(--muted);margin-bottom:3px}
+.qp-pct{font-size:10px;color:var(--label);margin-bottom:3px}
+.qp-amount{font-size:14px;font-weight:800;color:var(--gold)}
+.pay-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:12px}
+#summary-section{display:none}
+#summary-section.active{display:block}
+.summary-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.summary-card h3{font-size:12px;color:var(--accent);font-weight:700;margin-bottom:9px}
+.summary-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--border);gap:8px}
+.summary-row:last-child{border-bottom:none}
+.summary-key{font-size:10px;color:var(--muted);flex-shrink:0;min-width:100px}
+.summary-val{font-size:11px;color:var(--text);text-align:left;word-break:break-word}
+.quote-card{background:var(--card);border:2px solid rgba(0,212,170,.3);border-radius:14px;padding:20px;margin-bottom:14px}
+.quote-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px}
+.quote-title{font-size:18px;font-weight:800;color:#fff}
+.quote-subtitle{font-size:11px;color:var(--muted);margin-top:2px}
+.quote-total-box{text-align:center;background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.2);border-radius:10px;padding:12px 20px}
+.quote-total-label{font-size:10px;color:var(--accent2)}
+.quote-total-val{font-size:22px;font-weight:800;color:var(--accent2)}
+.ql-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--border);font-size:12px}
+.ql-row:last-child{border-bottom:none}
+.ql-label{color:var(--muted)}
+.ql-val{color:var(--text);font-weight:600}
+.ql-total{font-size:14px !important;font-weight:800 !important;color:var(--accent2) !important;border-top:2px solid var(--accent2) !important;border-bottom:none !important;padding-top:10px !important}
+.prompt-box{background:#0a0c10;border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-top:14px;position:relative}
+.prompt-box h3{font-size:10px;color:var(--accent2);font-weight:700;letter-spacing:1px;margin-bottom:9px}
+.prompt-text{font-size:11px;color:#aab;line-height:1.8;white-space:pre-wrap;font-family:'Courier New',monospace;max-height:280px;overflow-y:auto;direction:ltr;text-align:left}
+.copy-btn{position:absolute;top:10px;left:10px;background:var(--surface);border:1px solid var(--border);color:var(--label);padding:3px 9px;border-radius:5px;font-size:10px;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s}
+.copy-btn:hover{border-color:var(--accent2);color:var(--accent2)}
+@media print{
+  @page{size:A4;margin:14mm 12mm 18mm}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+  body{background:#fff !important;color:#111 !important;font-size:10pt;margin:0;padding:0;line-height:1.5}
+  header,.progress-bar,.steps-nav,.btn-row,.prompt-box,.no-print,.section,.tip,.guide-box,.addon-item,.price-meter,.price-edit-wrap,.cur-switcher,.discount-row,.pay-grid{display:none !important}
+  #summary-section{display:block !important}
+  .sec-hdr{display:none !important}
+  .quote-card{background:#F7F5F0 !important;border:1px solid #D8D2C4 !important;border-radius:4px;padding:14px;margin-bottom:14px;break-inside:avoid;page-break-inside:avoid}
+  .quote-header{flex-wrap:nowrap}
+  .quote-title{color:#1B2A4A !important;font-size:15pt}
+  .quote-subtitle{color:#6B7280 !important}
+  .quote-total-box{background:#fff !important;border-color:#C9A063 !important}
+  .quote-total-label{color:#8A6D3B !important}
+  .quote-total-val{color:#1B2A4A !important;font-size:18pt}
+  .ql-row{padding:5px 0}
+  .ql-label{color:#6B7280 !important}
+  .ql-val{color:#1f2430 !important}
+  .ql-total{color:#1B2A4A !important}
+  .qp-box{background:#fff !important;border:1px solid #D8D2C4;border-radius:4px;break-inside:avoid}
+  .qp-name,.qp-pct{color:#6B7280 !important}
+  .qp-amount{color:#8A6D3B !important}
+  .summary-card{background:#fff !important;border:1px solid #E5E1D8 !important;break-inside:avoid;page-break-inside:avoid;margin-bottom:10px;padding:12px;border-radius:4px}
+  .summary-card h3{color:#1B2A4A !important;border-bottom:1px solid #E5E1D8;padding-bottom:5px;margin-bottom:8px;font-size:11pt}
+  .summary-row{padding:3px 0}
+  .summary-key{color:#8A8378 !important}
+  .summary-val{color:#1f2430 !important}
+  body.print-mode-client .summary-card.internal-only{display:none !important}
+  body.print-mode-client .summary-row.internal-only{display:none !important}
+  body.print-mode-client .quote-card{display:none !important}
+  body.print-mode-client #summaryContent{display:none !important}
+  .contract-block{display:none}
+  body.print-mode-client .contract-block{display:block !important;break-inside:avoid}
+  body.print-mode-client .summary-card,body.print-mode-client .quote-card{break-inside:avoid;page-break-inside:avoid}
+  .contract-title{text-align:center;font-size:14pt;font-weight:800;color:#1B2A4A !important;margin:18px 0 4px;border-bottom:2px solid #1B2A4A;padding-bottom:8px}
+  .contract-sub{text-align:center;font-size:9pt;color:#6B7280 !important;margin-bottom:14px}
+  .contract-parties{display:flex;gap:10px;margin-bottom:12px}
+  .contract-party{flex:1;border:1px solid #D8D2C4;border-radius:5px;padding:10px;font-size:9.5pt}
+  .contract-party h4{font-size:10pt;color:#8A6D3B !important;margin-bottom:6px}
+  .contract-clause{margin-bottom:10px;break-inside:avoid;font-size:9.5pt;line-height:1.7}
+  .contract-clause h5{font-size:10pt;color:#1B2A4A !important;margin-bottom:4px}
+  .contract-sign{display:flex;gap:20px;margin-top:30px}
+  .contract-sign div{flex:1;text-align:center;font-size:9.5pt}
+  .contract-sign .line{border-top:1px solid #B8B2A4;margin-top:40px;padding-top:4px}
+  .print-mode-tag{display:none}
+  body.print-mode-internal .print-mode-tag.tag-internal{display:block !important;color:#8A6D3B !important;font-weight:700;font-size:9pt;margin-top:4px}
+  body.print-mode-client .print-mode-tag.tag-client{display:block !important;color:#1B2A4A !important;font-weight:700;font-size:9pt;margin-top:4px}
+  .print-header{display:block !important;page-break-after:avoid}
+  .print-footer{display:block !important}
+  #summary-section{counter-reset:none}
+}
+.print-footer{display:none;text-align:center;font-size:8pt;color:#9CA3AF;margin-top:18px;padding-top:8px;border-top:1px solid #E5E1D8}
+.print-header{display:none;text-align:center;padding:14px 0 10px;border-bottom:2px solid #1B2A4A;margin-bottom:14px}
+.print-header h2{font-size:15pt;color:#1B2A4A}
+.print-header p{font-size:9pt;color:#6B7280;margin-top:3px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ── أنماط خاصة بتوليد PDF عبر html2pdf ── */
+.pdf-page{
+  background:#fff;color:#111;font-family:'Tajawal',sans-serif;
+  font-size:10pt;line-height:1.5;direction:rtl;
+  padding:14mm 12mm 18mm;width:210mm;box-sizing:border-box;
+}
+.pdf-page .print-header{display:block !important;text-align:center;padding:14px 0 10px;border-bottom:2px solid #1a56db;margin-bottom:14px}
+.pdf-page .print-header h2{font-size:15pt;color:#1a56db}
+.pdf-page .print-header p{font-size:9pt;color:#555;margin-top:3px}
+.pdf-page .quote-card{background:#f8fffe !important;border:2px solid #00b894 !important;border-radius:8px;padding:14px;margin-bottom:14px}
+.pdf-page .quote-title{color:#111 !important;font-size:15pt;font-weight:800}
+.pdf-page .quote-subtitle{color:#555 !important;font-size:11px}
+.pdf-page .quote-total-box{background:#e8fff9 !important;border:1px solid #00b894;border-radius:10px;padding:12px 20px;text-align:center}
+.pdf-page .quote-total-label{font-size:10px;color:#00b894}
+.pdf-page .quote-total-val{font-size:22pt;font-weight:800;color:#00875a}
+.pdf-page .ql-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed #ddd;font-size:12px}
+.pdf-page .ql-label{color:#555}
+.pdf-page .ql-val{color:#111;font-weight:600}
+.pdf-page .ql-total{font-size:14px !important;font-weight:800 !important;color:#00875a !important;border-top:2px solid #00b894 !important;border-bottom:none !important;padding-top:10px !important}
+.pdf-page .summary-card{background:#fff !important;border:1px solid #ddd !important;margin-bottom:10px;padding:12px;border-radius:6px}
+.pdf-page .summary-card h3{color:#1a56db !important;border-bottom:1px solid #ddd;padding-bottom:5px;margin-bottom:8px;font-size:11pt;font-weight:700}
+.pdf-page .summary-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f0f0f0;gap:8px}
+.pdf-page .summary-key{font-size:10px;color:#666;flex-shrink:0;min-width:100px}
+.pdf-page .summary-val{font-size:11px;color:#111;word-break:break-word}
+.pdf-page .qp-box{background:#f0f0f0 !important;border-radius:5px;padding:7px 10px;text-align:center}
+.pdf-page .qp-name{font-size:10px;color:#555;margin-bottom:3px}
+.pdf-page .qp-pct{font-size:10px;color:#666;margin-bottom:3px}
+.pdf-page .qp-amount{font-size:14px;font-weight:800;color:#c47a00}
+.pdf-page .pay-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:12px}
+.pdf-page .print-footer{display:block !important;text-align:center;font-size:8pt;color:#888;margin-top:18px;padding-top:8px;border-top:1px solid #ddd}
+.pdf-page .quote-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #ddd;flex-wrap:wrap;gap:12px}
+/* نسخة الزبون: إخفاء البيانات الداخلية */
+.pdf-client .internal-only{display:none !important}
+.pdf-client .quote-card{display:none !important}
+.pdf-client #summaryContent{display:none !important}
+/* نسخة الداخلية: إخفاء العقد */
+.pdf-internal .contract-block{display:none !important}
+</style>
+</head>
+<body>
+<div class="print-header">
+  <h2 class="print-mode-tag tag-internal">Webni <span style="color:#555;font-size:11pt">ويبني</span> — عرض سعر مشروع برمجي (داخلي)</h2>
+  <h2 class="print-mode-tag tag-client">Webni <span style="color:#555;font-size:11pt">ويبني</span> — عقد تقديم خدمات برمجية</h2>
+  <p>Webni — ويبني | sajjadamanfarhan.pythonanywhere.com</p>
+  <p id="printDate"></p>
+  <p class="print-mode-tag tag-internal">⚠ نسخة داخلية — لاستخدام Webni فقط، تحتوي تفاصيل تقنية وملاحظات حساسة</p>
+  <p class="print-mode-tag tag-client">عقد رسمي مُعد خصيصاً لكم — يرجى المراجعة والتوقيع</p>
+</div>
+<header>
+  <div class="badge">🚀 Webni ويبني — تطوير مواقع وتطبيقات</div>
+  <h1>استمارة طلب <span>مشروع</span> برمجي</h1>
+  <p>أجب على الأسئلة وسيتم احتساب السعر تلقائياً بناءً على متطلباتك</p>
+</header>
+<div class="progress-bar">
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 7</div>
+</div>
+<div class="steps-nav">
+  <div class="step-pill active" data-step="0" onclick="goToStep(0)"><span class="si">👤</span>الزبون</div>
+  <div class="step-pill" data-step="1" onclick="goToStep(1)"><span class="si">💡</span>الفكرة</div>
+  <div class="step-pill" data-step="2" onclick="goToStep(2)"><span class="si">📄</span>الصفحات</div>
+  <div class="step-pill" data-step="3" onclick="goToStep(3)"><span class="si">⚙️</span>التقني</div>
+  <div class="step-pill" data-step="4" onclick="goToStep(4)"><span class="si">🎨</span>التصميم</div>
+  <div class="step-pill" data-step="5" onclick="goToStep(5)"><span class="si">💰</span>التسعير</div>
+  <div class="step-pill" data-step="6" onclick="goToStep(6)"><span class="si">📋</span>إضافات</div>
+</div>
+<div class="form-container">
+<!-- STEP 0 -->
+<div class="section active" id="step-0">
+  <div class="sec-hdr"><div class="sec-ico">👤</div><div><div class="sec-title">معلومات الزبون</div><div class="sec-sub">بيانات التواصل الأساسية</div></div></div>
+  <div class="card">
+    <div class="grid-2">
+      <div class="field" id="f-name"><label><span class="req">*</span>الاسم الكامل</label><input type="text" id="clientName" placeholder="مثال: أحمد محمد علي"/><div class="error-msg">مطلوب</div></div>
+      <div class="field" id="f-phone"><label><span class="req">*</span>الهاتف / واتساب</label><input type="tel" id="clientPhone" placeholder="+964 7XX XXX XXXX"/><div class="error-msg">مطلوب</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="field"><label>البريد الإلكتروني</label><input type="email" id="clientEmail" placeholder="example@email.com"/></div>
+      <div class="field"><label>اسم الشركة / العلامة التجارية</label><input type="text" id="clientCompany" placeholder="اختياري"/></div>
+    </div>
+    <div class="field"><label>طريقة التواصل المفضلة</label>
+      <div class="chips" id="contactMethod">
+        <div class="chip" onclick="selectChip(this,'contactMethod')">📱 واتساب</div>
+        <div class="chip" onclick="selectChip(this,'contactMethod')">📧 إيميل</div>
+        <div class="chip" onclick="selectChip(this,'contactMethod')">📞 مكالمة</div>
+        <div class="chip" onclick="selectChip(this,'contactMethod')">💬 تيليغرام</div>
+        <div class="chip" onclick="selectChip(this,'contactMethod')">👥 اجتماع</div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row"><span></span><button class="btn btn-primary" onclick="nextStep(0)">التالي ←</button></div>
+</div>
+<!-- STEP 1 -->
+<div class="section" id="step-1">
+  <div class="sec-hdr"><div class="sec-ico">💡</div><div><div class="sec-title">فكرة المشروع</div><div class="sec-sub">صف ما تريد بناءه — يؤثر على السعر</div></div></div>
+  <div class="tip"><p>💡 اختياراتك هنا تُحسب تلقائياً في السعر النهائي</p></div>
+  <div class="card">
+    <div class="grid-2">
+      <div class="field" id="f-projName"><label><span class="req">*</span>اسم المشروع</label><input type="text" id="projName" placeholder="مثال: متجر ملابس نسائية"/><div class="error-msg">مطلوب</div></div>
+      <div class="field"><label>حالة المشروع</label>
+        <div class="chips" id="projStatus">
+          <div class="chip" onclick="selectChip(this,'projStatus')">🆕 جديد</div>
+          <div class="chip" onclick="selectChip(this,'projStatus')">🔄 تطوير موجود</div>
+          <div class="chip" onclick="selectChip(this,'projStatus')">♻️ إعادة بناء</div>
+        </div>
+      </div>
+    </div>
+    <div class="field" id="f-projType"><label><span class="req">*</span>نوع المشروع <span class="hint">— السعر الأساسي بين قوسين</span></label>
+      <div class="chips" id="projType">
+        <div class="chip" onclick="selectProjType(this,50000)">🌐 Landing Page (50k)</div>
+        <div class="chip" onclick="selectProjType(this,150000)">🏢 موقع شركة (150k)</div>
+        <div class="chip" onclick="selectProjType(this,80000)">💼 بورتفوليو (80k)</div>
+        <div class="chip" onclick="selectProjType(this,350000)">🛒 متجر إلكتروني (350k)</div>
+        <div class="chip" onclick="selectProjType(this,450000)">🖥️ نظام إدارة (450k)</div>
+        <div class="chip" onclick="selectProjType(this,300000)">📊 لوحة تحكم (300k)</div>
+        <div class="chip" onclick="selectProjType(this,500000)">📱 تطبيق بسيط (500k)</div>
+        <div class="chip" onclick="selectProjType(this,900000)">📱 تطبيق متكامل (900k)</div>
+        <div class="chip" onclick="selectProjType(this,700000)">🎓 منصة تعليمية (700k)</div>
+        <div class="chip" onclick="selectProjType(this,200000)">🤖 بوت / أتمتة (200k)</div>
+        <div class="chip" onclick="selectProjType(this,250000)">🍽️ مطعم/طلبات (250k)</div>
+        <div class="chip" onclick="selectProjType(this,350000)">🏥 نظام عيادة (350k)</div>
+        <div class="chip" onclick="selectProjType(this,300000)">🏘️ عقارات (300k)</div>
+        <div class="chip" onclick="selectProjType(this,200000)">🔧 أخرى (200k)</div>
+      </div>
+      <div class="error-msg">اختر نوع المشروع</div>
+    </div>
+    <div class="field" id="f-projDesc"><label><span class="req">*</span>وصف المشروع</label><textarea id="projDesc" rows="4" placeholder="صف الفكرة: ما المشكلة التي يحلها؟ من سيستخدمه؟ كيف يعمل؟"></textarea><div class="error-msg">مطلوب</div></div>
+    <div class="grid-2">
+      <div class="field"><label>الجمهور المستهدف</label><input type="text" id="projAudience" placeholder="مثال: أصحاب المحلات في العراق"/></div>
+      <div class="field"><label>مراجع / مواقع مشابهة</label><input type="text" id="projRef" placeholder="روابط أو أسماء مواقع تحبها"/></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-outline" onclick="prevStep(1)">→ السابق</button><button class="btn btn-primary" onclick="nextStep(1)">التالي ←</button></div>
+</div>
+<!-- STEP 2 -->
+<div class="section" id="step-2">
+  <div class="sec-hdr"><div class="sec-ico">📄</div><div><div class="sec-title">هيكل الصفحات</div><div class="sec-sub">كل صفحة تُضاف للسعر</div></div></div>
+  <div class="card">
+    <div class="card-title">📑 الصفحات المطلوبة <span style="color:var(--muted);font-weight:400">(السعر بين قوسين بالدينار)</span></div>
+    <div class="chips" id="pages">
+      <div class="chip multi" data-p="15000" onclick="togglePageChip(this)">🏠 الرئيسية (15k)</div>
+      <div class="chip multi" data-p="10000" onclick="togglePageChip(this)">👤 من نحن (10k)</div>
+      <div class="chip multi" data-p="10000" onclick="togglePageChip(this)">📞 اتصل بنا (10k)</div>
+      <div class="chip multi" data-p="20000" onclick="togglePageChip(this)">🛍️ المنتجات (20k)</div>
+      <div class="chip multi" data-p="30000" onclick="togglePageChip(this)">🛒 سلة التسوق (30k)</div>
+      <div class="chip multi" data-p="40000" onclick="togglePageChip(this)">💳 صفحة الدفع (40k)</div>
+      <div class="chip multi" data-p="25000" onclick="togglePageChip(this)">📝 مدونة (25k)</div>
+      <div class="chip multi" data-p="20000" onclick="togglePageChip(this)">🔐 تسجيل دخول (20k)</div>
+      <div class="chip multi" data-p="35000" onclick="togglePageChip(this)">📊 لوحة المستخدم (35k)</div>
+      <div class="chip multi" data-p="15000" onclick="togglePageChip(this)">⚙️ الإعدادات (15k)</div>
+      <div class="chip multi" data-p="10000" onclick="togglePageChip(this)">❓ الأسئلة الشائعة (10k)</div>
+      <div class="chip multi" data-p="15000" onclick="togglePageChip(this)">⭐ التقييمات (15k)</div>
+      <div class="chip multi" data-p="20000" onclick="togglePageChip(this)">🗺️ الخريطة (20k)</div>
+      <div class="chip multi" data-p="10000" onclick="togglePageChip(this)">📜 سياسة الخصوصية (10k)</div>
+      <div class="chip multi" data-p="30000" onclick="togglePageChip(this)">📅 حجز موعد (30k)</div>
+      <div class="chip multi" data-p="25000" onclick="togglePageChip(this)">🚚 تتبع الطلب (25k)</div>
+    </div>
+    <div class="field" style="margin-top:12px"><label>صفحات إضافية</label><input type="text" id="extraPages" placeholder="مثال: صفحة الشركاء، المعرض..."/></div>
+  </div>
+  <div class="card">
+    <div class="grid-2">
+      <div class="field"><label>أدوار المستخدمين</label>
+        <div class="chips" id="userRoles">
+          <div class="chip multi" onclick="toggleChip(this)">👑 مدير</div>
+          <div class="chip multi" onclick="toggleChip(this)">👤 مستخدم مسجل</div>
+          <div class="chip multi" onclick="toggleChip(this)">👁️ زائر</div>
+          <div class="chip multi" onclick="toggleChip(this)">🤝 بائع/شريك</div>
+          <div class="chip multi" onclick="toggleChip(this)">🚚 موصّل</div>
+          <div class="chip multi" onclick="toggleChip(this)">👨‍💼 محرر</div>
+        </div>
+      </div>
+      <div class="field"><label>نوع المحتوى</label>
+        <div class="chips" id="contentType">
+          <div class="chip" onclick="selectChip(this,'contentType')">📝 ثابت</div>
+          <div class="chip" onclick="selectChip(this,'contentType')">⚡ ديناميكي</div>
+          <div class="chip" onclick="selectChip(this,'contentType')">🔀 مختلط</div>
+        </div>
+      </div>
+    </div>
+    <div class="field"><label>اللغات</label>
+      <div class="chips" id="siteLanguages">
+        <div class="chip multi" onclick="toggleChip(this)">🇸🇦 عربي</div>
+        <div class="chip multi" onclick="toggleChip(this)">🇬🇧 إنجليزي</div>
+        <div class="chip multi" onclick="toggleChip(this)">🇮🇷 كردي</div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-outline" onclick="prevStep(2)">→ السابق</button><button class="btn btn-primary" onclick="nextStep(2)">التالي ←</button></div>
+</div>
+<!-- STEP 3 -->
+<div class="section" id="step-3">
+  <div class="sec-hdr"><div class="sec-ico">⚙️</div><div><div class="sec-title">المتطلبات التقنية</div><div class="sec-sub">كل ميزة تُضاف للسعر</div></div></div>
+  <div class="card">
+    <div class="card-title">✨ الميزات الرئيسية</div>
+    <div class="chips" id="features">
+      <div class="chip multi" data-fp="40000" onclick="toggleFeatChip(this)">🔐 تسجيل دخول (40k)</div>
+      <div class="chip multi" data-fp="80000" onclick="toggleFeatChip(this)">💳 دفع إلكتروني (80k)</div>
+      <div class="chip multi" data-fp="50000" onclick="toggleFeatChip(this)">📦 إدارة منتجات (50k)</div>
+      <div class="chip multi" data-fp="30000" onclick="toggleFeatChip(this)">🔔 إشعارات Push (30k)</div>
+      <div class="chip multi" data-fp="60000" onclick="toggleFeatChip(this)">💬 شات مباشر (60k)</div>
+      <div class="chip multi" data-fp="40000" onclick="toggleFeatChip(this)">📍 خرائط/GPS (40k)</div>
+      <div class="chip multi" data-fp="50000" onclick="toggleFeatChip(this)">📊 تقارير (50k)</div>
+      <div class="chip multi" data-fp="30000" onclick="toggleFeatChip(this)">📷 رفع ملفات (30k)</div>
+      <div class="chip multi" data-fp="100000" onclick="toggleFeatChip(this)">🤖 ذكاء اصطناعي (100k)</div>
+      <div class="chip multi" data-fp="50000" onclick="toggleFeatChip(this)">🔄 ربط API (50k)</div>
+      <div class="chip multi" data-fp="25000" onclick="toggleFeatChip(this)">📧 إيميل تلقائي (25k)</div>
+      <div class="chip multi" data-fp="35000" onclick="toggleFeatChip(this)">🔍 بحث متقدم (35k)</div>
+      <div class="chip multi" data-fp="40000" onclick="toggleFeatChip(this)">📝 محرر CMS (40k)</div>
+      <div class="chip multi" data-fp="45000" onclick="toggleFeatChip(this)">🔒 صلاحيات متعددة (45k)</div>
+      <div class="chip multi" data-fp="35000" onclick="toggleFeatChip(this)">💰 فواتير (35k)</div>
+      <div class="chip multi" data-fp="30000" onclick="toggleFeatChip(this)">🚚 تتبع الطلبات (30k)</div>
+      <div class="chip multi" data-fp="50000" onclick="toggleFeatChip(this)">📱 PWA (50k)</div>
+      <div class="chip multi" data-fp="80000" onclick="toggleFeatChip(this)">📲 موبايل App (80k)</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="grid-2">
+      <div class="field"><label>بيئة التطوير</label>
+        <div class="chips" id="devEnv">
+          <div class="chip multi" onclick="toggleChip(this)">🤖 Claude AI</div>
+          <div class="chip multi" onclick="toggleChip(this)">💻 VS Code</div>
+          <div class="chip multi" onclick="toggleChip(this)">🌐 Replit</div>
+          <div class="chip multi" onclick="toggleChip(this)">🖱️ Cursor</div>
+          <div class="chip multi" onclick="toggleChip(this)">⚡ Bolt.new</div>
+          <div class="chip multi" onclick="toggleChip(this)">🎨 Lovable</div>
+        </div>
+      </div>
+      <div class="field"><label>التقنيات المفضلة</label>
+        <div class="chips" id="techStack">
+          <div class="chip multi" onclick="toggleChip(this)">⚛️ React/Next.js</div>
+          <div class="chip multi" onclick="toggleChip(this)">🐍 Django/Python</div>
+          <div class="chip multi" onclick="toggleChip(this)">🟩 Node.js</div>
+          <div class="chip multi" onclick="toggleChip(this)">⚡ .NET/C#</div>
+          <div class="chip multi" onclick="toggleChip(this)">🐘 Laravel/PHP</div>
+          <div class="chip multi" onclick="toggleChip(this)">📱 Flutter</div>
+          <div class="chip multi" onclick="toggleChip(this)">🔥 Firebase</div>
+          <div class="chip multi" onclick="toggleChip(this)">☁️ اترك للمطور</div>
+        </div>
+      </div>
+    </div>
+    <div class="field"><label>الاستضافة</label>
+      <div class="chips" id="hosting">
+        <div class="chip" onclick="selectChip(this,'hosting')">☁️ Vercel/Netlify</div>
+        <div class="chip" onclick="selectChip(this,'hosting')">🖥️ VPS</div>
+        <div class="chip" onclick="selectChip(this,'hosting')">🌐 مشتركة</div>
+        <div class="chip" onclick="selectChip(this,'hosting')">📦 AWS/Azure</div>
+        <div class="chip" onclick="selectChip(this,'hosting')">❓ اقترح</div>
+      </div>
+    </div>
+    <div class="toggle-row">
+      <div class="toggle-info"><strong>Admin Panel</strong><small>لوحة إدارة كاملة</small><span class="price-add">+ 100,000 د.ع</span></div>
+      <label class="toggle"><input type="checkbox" id="needAdmin" onchange="recalcPrice()"/><span class="toggle-slider"></span></label>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-outline" onclick="prevStep(3)">→ السابق</button><button class="btn btn-primary" onclick="nextStep(3)">التالي ←</button></div>
+</div>
+<!-- STEP 4 -->
+<div class="section" id="step-4">
+  <div class="sec-hdr"><div class="sec-ico">🎨</div><div><div class="sec-title">التصميم والهوية</div><div class="sec-sub">الشكل والمظهر</div></div></div>
+  <div class="card">
+    <div class="field"><label>الأسلوب البصري</label>
+      <div class="chips" id="designStyle">
+        <div class="chip" onclick="selectChip(this,'designStyle')">✨ Minimal</div>
+        <div class="chip" onclick="selectChip(this,'designStyle')">🌙 Dark Mode</div>
+        <div class="chip" onclick="selectChip(this,'designStyle')">☀️ فاتح وجذاب</div>
+        <div class="chip" onclick="selectChip(this,'designStyle')">🏢 رسمي</div>
+        <div class="chip" onclick="selectChip(this,'designStyle')">🎮 عصري</div>
+        <div class="chip" onclick="selectChip(this,'designStyle')">🎨 إبداعي</div>
+        <div class="chip" onclick="selectChip(this,'designStyle')">💫 اترك للمطور</div>
+      </div>
+    </div>
+    <div class="field"><label>الألوان المفضلة</label><input type="text" id="brandColors" placeholder="مثال: أزرق وأبيض، أسود وذهبي..."/></div>
+  </div>
+  <div class="card">
+    <div class="toggle-row">
+      <div class="toggle-info"><strong>تصميم UI/UX مخصص</strong><small>تصميم شاشات احترافية قبل البناء</small><span class="price-add">+ 80,000 د.ع</span></div>
+      <label class="toggle"><input type="checkbox" id="needUIUX" onchange="recalcPrice()"/><span class="toggle-slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <div class="toggle-info"><strong>تصميم لوغو</strong><small>شعار احترافي</small><span class="price-add">+ 50,000 د.ع</span></div>
+      <label class="toggle"><input type="checkbox" id="needLogo" onchange="recalcPrice()"/><span class="toggle-slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <div class="toggle-info"><strong>لوغو موجود</strong><small>عندي شعار جاهز</small></div>
+      <label class="toggle"><input type="checkbox" id="hasLogo"/><span class="toggle-slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <div class="toggle-info"><strong>محتوى جاهز</strong><small>صور ونصوص موجودة</small></div>
+      <label class="toggle"><input type="checkbox" id="hasContent"/><span class="toggle-slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <div class="toggle-info"><strong>دومين موجود</strong><small>عندي دومين مسجل</small></div>
+      <label class="toggle"><input type="checkbox" id="hasDomain"/><span class="toggle-slider"></span></label>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-outline" onclick="prevStep(4)">→ السابق</button><button class="btn btn-primary" onclick="nextStep(4)">التالي ←</button></div>
+</div>
+<!-- STEP 5: PRICING -->
+<div class="section" id="step-5">
+  <div class="sec-hdr"><div class="sec-ico">💰</div><div><div class="sec-title">التسعير الذكي</div><div class="sec-sub">السعر يُحسب من اختياراتك — يمكنك تعديله بحرية</div></div></div>
+  <div class="guide-box">
+    <h4>📊 مرجع أسعار السوق العراقي 2025</h4>
+    <div class="guide-item"><span>Landing Page بسيط</span><strong>50,000 – 150,000 د.ع</strong></div>
+    <div class="guide-item"><span>موقع شركة + Admin</span><strong>200,000 – 500,000 د.ع</strong></div>
+    <div class="guide-item"><span>متجر إلكتروني كامل</span><strong>400,000 – 1,000,000 د.ع</strong></div>
+    <div class="guide-item"><span>تطبيق جوال بسيط</span><strong>500,000 – 1,500,000 د.ع</strong></div>
+    <div class="guide-item"><span>نظام إدارة / ERP</span><strong>1,000,000+ د.ع</strong></div>
+    <div class="guide-item"><span>صيانة شهرية</span><strong>10-15% من السعر</strong></div>
+  </div>
+  <div class="cur-switcher">
+    <button class="cur-btn active" id="btnIQD" onclick="setCurrency('IQD')">🇮🇶 دينار عراقي</button>
+    <button class="cur-btn" id="btnUSD" onclick="setCurrency('USD')">🇺🇸 دولار USD</button>
+  </div>
+  <!-- PRICE METER -->
+  <div class="price-meter">
+    <div class="pm-label">💰 السعر الإجمالي</div>
+    <div class="pm-total" id="pmTotal">0 د.ع</div>
+    <div class="pm-sub" id="pmSub">أكمل الاستمارة لحساب السعر</div>
+    <div class="pm-bar"><div class="pm-bar-fill" id="pmBarFill"></div></div>
+    <div class="pm-breakdown">
+      <div class="pm-item"><span class="pm-item-label">🏗️ أساس المشروع</span><span class="pm-item-val pos" id="pmBase">—</span></div>
+      <div class="pm-item"><span class="pm-item-label">📄 الصفحات</span><span class="pm-item-val pos" id="pmPages">—</span></div>
+      <div class="pm-item"><span class="pm-item-label">⚙️ الميزات</span><span class="pm-item-val pos" id="pmFeats">—</span></div>
+      <div class="pm-item"><span class="pm-item-label">➕ الإضافات</span><span class="pm-item-val pos" id="pmAddons">—</span></div>
+      <div class="pm-item"><span class="pm-item-label">🏷️ الخصم</span><span class="pm-item-val neg" id="pmDiscount">—</span></div>
+      <div class="pm-item"><span class="pm-item-label">📆 رسوم التقسيط</span><span class="pm-item-val pos" id="pmInstallment">—</span></div>
+      <div class="pm-item"><span class="pm-item-label">🔧 صيانة/شهر</span><span class="pm-item-val" id="pmMaint">—</span></div>
+    </div>
+  </div>
+  <!-- DISCOUNT (right under price) -->
+  <div class="card">
+    <div class="card-title">🏷️ خصم (اختياري)</div>
+    <div class="discount-row">
+      <input type="number" class="discount-input" id="discountVal" placeholder="0" min="0" oninput="recalcPrice()" onchange="recalcPrice()" onkeyup="recalcPrice()"/>
+      <div class="discount-type">
+        <button type="button" class="disc-btn active" id="discPctBtn" onclick="setDiscType('pct')">%</button>
+        <button type="button" class="disc-btn" id="discIQDBtn" onclick="setDiscType('iqd')">د.ع</button>
+      </div>
+      <span style="font-size:11px;color:var(--muted)">الخصم: <strong id="discApplied" style="color:var(--red)">0 د.ع</strong></span>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:6px">الخصم ينطبق على السعر المحسوب تلقائياً وعلى السعر اليدوي أيضاً.</div>
+  </div>
+  <!-- MANUAL EDIT -->
+  <div class="card price-edit-wrap">
+    <div class="price-edit-label">✏️ تعديل السعر يدوياً (أدخل أي قيمة بالدينار العراقي)</div>
+    <div class="price-edit-row">
+      <input type="number" class="price-edit-input" id="manualPrice" placeholder="0" min="0" step="5000"/>
+      <button class="price-recalc-btn" onclick="applyManualPrice()">✅ تطبيق</button>
+      <button class="price-recalc-btn blue" onclick="resetToCalculated()">🔄 إعادة حساب</button>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:6px">السعر المحسوب تلقائياً: <strong id="autoCalcDisplay" style="color:var(--accent2)">0 د.ع</strong></div>
+  </div>
+  <!-- ADDONS -->
+  <div class="card">
+    <div class="card-title">➕ خدمات إضافية — اختر ما تريد إضافته للسعر</div>
+    <div class="addon-item" onclick="toggleAddon(this,50000)" data-ap="0">
+      <div class="addon-left"><span class="addon-icon">🔧</span><div><div class="addon-name">صيانة 3 أشهر</div><div class="addon-desc">إصلاح الأخطاء + تحديثات بعد التسليم</div></div></div>
+      <span class="addon-price">+50,000 د.ع</span><div class="addon-check">✓</div>
+    </div>
+    <div class="addon-item" onclick="toggleAddon(this,120000)" data-ap="0">
+      <div class="addon-left"><span class="addon-icon">🛡️</span><div><div class="addon-name">صيانة سنة كاملة</div><div class="addon-desc">دعم فني + تحديثات لمدة 12 شهر</div></div></div>
+      <span class="addon-price">+120,000 د.ع</span><div class="addon-check">✓</div>
+    </div>
+    <div class="addon-item" onclick="toggleAddon(this,40000)" data-ap="0">
+      <div class="addon-left"><span class="addon-icon">🎓</span><div><div class="addon-name">تدريب على الاستخدام</div><div class="addon-desc">جلسة شرح + توثيق كامل</div></div></div>
+      <span class="addon-price">+40,000 د.ع</span><div class="addon-check">✓</div>
+    </div>
+    <div class="addon-item" onclick="toggleAddon(this,60000)" data-ap="0">
+      <div class="addon-left"><span class="addon-icon">🔐</span><div><div class="addon-name">حزمة الأمان المتقدم</div><div class="addon-desc">SSL + حماية DDoS + نسخ احتياطية</div></div></div>
+      <span class="addon-price">+60,000 د.ع</span><div class="addon-check">✓</div>
+    </div>
+    <div class="addon-item" onclick="toggleAddon(this,80000)" data-ap="0">
+      <div class="addon-left"><span class="addon-icon">🚀</span><div><div class="addon-name">تحسين SEO</div><div class="addon-desc">تهيئة الموقع لمحركات البحث Google</div></div></div>
+      <span class="addon-price">+80,000 د.ع</span><div class="addon-check">✓</div>
+    </div>
+    <div class="addon-item" onclick="toggleAddon(this,70000)" data-ap="0">
+      <div class="addon-left"><span class="addon-icon">📱</span><div><div class="addon-name">تحسين تجربة الموبايل</div><div class="addon-desc">تصميم متجاوب متخصص + اختبار شامل</div></div></div>
+      <span class="addon-price">+70,000 د.ع</span><div class="addon-check">✓</div>
+    </div>
+    <div class="addon-item" onclick="toggleAddon(this,50000)" data-ap="0">
+      <div class="addon-left"><span class="addon-icon">📈</span><div><div class="addon-name">Google Analytics + تتبع</div><div class="addon-desc">ربط أدوات تحليل الزوار</div></div></div>
+      <span class="addon-price">+50,000 د.ع</span><div class="addon-check">✓</div>
+    </div>
+    <div class="addon-item" onclick="toggleAddon(this,35000)" data-ap="0">
+      <div class="addon-left"><span class="addon-icon">☁️</span><div><div class="addon-name">إعداد الاستضافة والنشر</div><div class="addon-desc">رفع المشروع + دومين + SSL</div></div></div>
+      <span class="addon-price">+35,000 د.ع</span><div class="addon-check">✓</div>
+    </div>
+    <div class="addon-item" onclick="toggleAddon(this,45000)" data-ap="0">
+      <div class="addon-left"><span class="addon-icon">📄</span><div><div class="addon-name">توثيق تقني كامل</div><div class="addon-desc">دليل المستخدم + توثيق الكود</div></div></div>
+      <span class="addon-price">+45,000 د.ع</span><div class="addon-check">✓</div>
+    </div>
+    <div class="addon-item" onclick="toggleAddon(this,90000)" data-ap="0">
+      <div class="addon-left"><span class="addon-icon">🌍</span><div><div class="addon-name">دعم متعدد اللغات</div><div class="addon-desc">ترجمة وتهيئة لأكثر من لغة</div></div></div>
+      <span class="addon-price">+90,000 د.ع</span><div class="addon-check">✓</div>
+    </div>
+    <div class="addon-item" onclick="toggleAddon(this,55000)" data-ap="0">
+      <div class="addon-left"><span class="addon-icon">🔑</span><div><div class="addon-name">تسليم كود المصدر</div><div class="addon-desc">الكود الكامل + تعليمات التشغيل</div></div></div>
+      <span class="addon-price">+55,000 د.ع</span><div class="addon-check">✓</div>
+    </div>
+  </div>
+  <!-- PAYMENT PLAN -->
+  <div class="card">
+    <div class="card-title">📅 خطة الدفع</div>
+    <div class="chips" id="paymentPlan">
+      <div class="chip" onclick="selectPayPlan(this,'full')">💵 دفع كامل</div>
+      <div class="chip" onclick="selectPayPlan(this,'two')">✌️ دفعتان (50/50) +3%</div>
+      <div class="chip" onclick="selectPayPlan(this,'three')">🔢 ثلاث دفعات +5%</div>
+      <div class="chip" onclick="selectPayPlan(this,'monthly')">📆 شهري +8%</div>
+    </div>
+    <div id="paymentPlanDetail" style="display:none;margin-top:12px">
+      <div class="pay-grid" id="paymentBoxes"></div>
+    </div>
+  </div>
+  <!-- DEADLINE -->
+  <div class="card">
+    <div class="card-title">⏰ موعد التسليم</div>
+    <div class="chips" id="deadline">
+      <div class="chip" onclick="selectChip(this,'deadline')">⚡ أسرع ما يمكن</div>
+      <div class="chip" onclick="selectChip(this,'deadline')">📅 أسبوع</div>
+      <div class="chip" onclick="selectChip(this,'deadline')">📅 أسبوعان</div>
+      <div class="chip" onclick="selectChip(this,'deadline')">📅 شهر</div>
+      <div class="chip" onclick="selectChip(this,'deadline')">📅 شهرين</div>
+      <div class="chip" onclick="selectChip(this,'deadline')">📅 3 أشهر+</div>
+      <div class="chip" onclick="selectChip(this,'deadline')">🗓️ تاريخ محدد</div>
+    </div>
+    <div id="f-specificDate" style="display:none;margin-top:10px"><label>التاريخ</label><input type="text" id="specificDate" placeholder="مثال: 1 أغسطس 2025"/></div>
+  </div>
+  <div class="btn-row"><button class="btn btn-outline" onclick="prevStep(5)">→ السابق</button><button class="btn btn-primary" onclick="nextStep(5)">التالي ←</button></div>
+</div>
+<!-- STEP 6 -->
+<div class="section" id="step-6">
+  <div class="sec-hdr"><div class="sec-ico">📋</div><div><div class="sec-title">معلومات إضافية</div><div class="sec-sub">تكمل الصورة للذكاء الاصطناعي</div></div></div>
+  <div class="card">
+    <div class="field"><label>الأولويات</label>
+      <div class="chips" id="priorities">
+        <div class="chip multi" onclick="toggleChip(this)">🚀 السرعة</div>
+        <div class="chip multi" onclick="toggleChip(this)">💎 الجودة</div>
+        <div class="chip multi" onclick="toggleChip(this)">🔒 الأمان</div>
+        <div class="chip multi" onclick="toggleChip(this)">⚡ الأداء</div>
+        <div class="chip multi" onclick="toggleChip(this)">💰 أقل تكلفة</div>
+        <div class="chip multi" onclick="toggleChip(this)">📈 التوسع</div>
+        <div class="chip multi" onclick="toggleChip(this)">🧩 سهولة الاستخدام</div>
+        <div class="chip multi" onclick="toggleChip(this)">📱 تجربة الموبايل</div>
+      </div>
+    </div>
+    <div class="field"><label>المنافسون</label><textarea id="competitors" rows="2" placeholder="مواقع أو تطبيقات منافسة تعرفها..."></textarea></div>
+    <div class="field"><label>قيود خاصة</label>
+      <div class="chips" id="restrictions">
+        <div class="chip multi" onclick="toggleChip(this)">🚫 لا بيانات مع طرف ثالث</div>
+        <div class="chip multi" onclick="toggleChip(this)">🇮🇶 استضافة بالعراق</div>
+        <div class="chip multi" onclick="toggleChip(this)">📵 بدون إعلانات</div>
+        <div class="chip multi" onclick="toggleChip(this)">📜 GDPR</div>
+      </div>
+    </div>
+    <div class="field"><label>ملاحظات إضافية</label><textarea id="extraNotes" rows="3" placeholder="أي تفاصيل أو متطلبات خاصة لم تجدها في الاستمارة..."></textarea></div>
+  </div>
+  <div class="card">
+    <div class="card-title">➕ إضافات ومتطلبات مخصصة (غير محدودة)</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:10px">إذا الزبون يحتاج شي معين غير موجود بالاستمارة (ميزة خاصة، صفحة معينة، شرط خاص...) أضفه هنا — تقدر تضيف أي عدد.</div>
+    <div id="customFieldsContainer"></div>
+    <button type="button" class="btn btn-outline btn-sm" onclick="addCustomField()" style="margin-top:6px">+ إضافة عنصر جديد</button>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="prevStep(6)">→ السابق</button>
+    <button class="btn btn-success" onclick="generateSummary()">✅ إنشاء العرض + Prompt</button>
+  </div>
+</div>
+<!-- SUMMARY -->
+<div id="summary-section">
+  <div class="sec-hdr" style="margin-top:6px">
+    <div class="sec-ico" style="background:rgba(0,212,170,.1);border-color:rgba(0,212,170,.25)">✅</div>
+    <div><div class="sec-title">عرض السعر الجاهز</div><div class="sec-sub">اطبع PDF أو انسخ الـ Prompt للذكاء الاصطناعي</div></div>
+  </div>
+  <div class="btn-row no-print" style="margin-top:0;margin-bottom:14px">
+    <button class="btn btn-gold btn-sm" onclick="printPDF('internal')">🖨️ طباعة داخلية (لنا)</button>
+    <button class="btn btn-primary btn-sm" onclick="printPDF('client')">📄 طباعة نسخة الزبون</button>
+    <button class="btn btn-outline btn-sm" onclick="resetForm()">🔄 طلب جديد</button>
+  </div>
+  <div class="quote-card">
+    <div class="quote-header">
+      <div>
+        <div class="quote-title">عرض سعر مشروع برمجي</div>
+        <div class="quote-subtitle">Webni ويبني</div>
+        <div class="quote-subtitle" id="quoteDate" style="margin-top:4px"></div>
+      </div>
+      <div class="quote-total-box">
+        <div class="quote-total-label">المبلغ الإجمالي</div>
+        <div class="quote-total-val" id="quoteTotalDisplay">—</div>
+      </div>
+    </div>
+    <div id="quoteLines"></div>
+    <div class="pay-grid" id="quotePlanBoxes" style="margin-top:12px"></div>
+  </div>
+  <div class="card no-print" style="margin-top:14px">
+    <div class="card-title">📤 إرسال العرض للزبون مباشرة</div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:8px">⚠️ هذا الرقم والإيميل هما رقم وإيميل <strong>الزبون</strong> (تم تعبيتهم تلقائياً من بياناته في الخطوة 1) — وليسا رقمنا أو إيميلنا. عدّلهم فقط إذا تريد الإرسال لجهة تواصل مختلفة.</div>
+    <div class="grid-2">
+      <div class="field"><label>رقم واتساب الزبون (مع كود الدولة، مثال 9647xxxxxxxx)</label><input type="text" id="sendWaNumber"/></div>
+      <div class="field"><label>إيميل الزبون</label><input type="text" id="sendEmailTo"/></div>
+    </div>
+    <div class="btn-row" style="margin-top:6px">
+      <button class="btn btn-primary btn-sm" onclick="sendWhatsApp()">🟢 إرسال عبر واتساب</button>
+      <button class="btn btn-outline btn-sm" onclick="sendEmailQuote()">✉️ إرسال بالإيميل</button>
+      <button class="btn btn-outline btn-sm" onclick="copyTeamSummary()">👥 نسخ ملخص الفريق (داخلي)</button>
+    </div>
+    <div style="margin-top:10px;border-top:1px dashed #2a3a5a;padding-top:10px">
+      <button id="tgSendBtn" class="btn btn-sm" onclick="sendToCompanyBot()"
+        style="background:linear-gradient(135deg,#229ed9,#1a7fc2);color:#fff;font-size:13px;width:100%;padding:11px;border-radius:8px;box-shadow:0 3px 10px rgba(34,158,217,.35);font-weight:700">
+        📤 إرسال تلقائي للقناة (ملخص + PDF الزبون + PDF الداخلي + Prompt)
+      </button>
+      <div id="tgStatus" style="font-size:10px;color:var(--muted);margin-top:6px;text-align:center;min-height:14px"></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.7;background:rgba(34,158,217,.06);border:1px solid rgba(34,158,217,.15);border-radius:6px;padding:7px 10px">
+        ✨ <strong style="color:#8ba4ff">تلقائي بالكامل</strong> — بضغطة واحدة يُولَّد PDF الزبون + PDF الداخلي ويُرسلان مع ملخص الفريق للقناة مباشرةً
+      </div>
+    </div>
+    <!-- زر تيليجرام الموحد -->
+    <div style="margin-top:10px;border-top:1px dashed #2a3a5a;padding-top:10px">
+      <div style="font-size:11px;color:#8ba4ff;margin-bottom:8px;font-weight:700">📎 إرسال للقناة — مع ملفات PDF</div>
+      <button class="btn btn-sm" onclick="openTelegramChannel()" style="width:100%;background:linear-gradient(135deg,#229ed9,#0f6a9e);color:#fff;padding:12px;border-radius:10px;box-shadow:0 4px 14px rgba(34,158,217,.4);font-size:13px;font-weight:700;letter-spacing:.3px">
+        ✈️ فتح القناة + نسخ الرسالة — ثم أرفق الـ PDFs وأرسل
+      </button>
+      <div id="tgDirectStatus" style="font-size:10px;color:var(--muted);margin-top:6px;text-align:center;min-height:14px"></div>
+      <div style="margin-top:8px;background:rgba(34,158,217,.08);border:1px solid rgba(34,158,217,.2);border-radius:7px;padding:8px 10px;font-size:10px;color:#8ba4ff;line-height:1.7">
+        <strong>📋 خطوات الإرسال:</strong><br/>
+        1️⃣ اضغط الزر → ستُنسخ الرسالة تلقائياً وتُفتح القناة<br/>
+        2️⃣ الصق الرسالة في حقل النص بالقناة<br/>
+        3️⃣ أرفق <strong>PDF الزبون</strong> + <strong>PDF الداخلي (ملخص الفريق)</strong><br/>
+        4️⃣ اضغط إرسال ✅
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:6px">سيتم فتح واتساب/الإيميل عندك مع رسالة جاهزة للزبون — راجعها واضغط إرسال. زر "نسخ ملخص الفريق" ينسخ نسخة داخلية كاملة (تقنية + تسعير) خاصة بشركتنا لتلصقها بمجموعة الفريق.</div>
+  </div>
+  <div id="summaryContent"></div>
+  <div id="contractBlock" class="contract-block" style="display:none"></div>
+  <div class="print-footer">Webni ويبني | sajjadamanfarhan.pythonanywhere.com | هذا العرض صالح لمدة 14 يوم من تاريخه</div>
+  <div class="prompt-box no-print">
+    <h3>▶ AI PROMPT — انسخ وأرسل لـ Claude أو أي ذكاء اصطناعي</h3>
+    <div class="prompt-text" id="aiPrompt"></div>
+    <button class="copy-btn" onclick="copyPrompt()">📋 نسخ</button>
+  </div>
+  <div class="btn-row no-print" style="margin-top:14px">
+    <button class="btn btn-outline" onclick="resetForm()">🔄 طلب جديد</button>
+    <button class="btn btn-gold" onclick="printPDF('internal')">🖨️ طباعة داخلية</button>
+    <button class="btn btn-primary" onclick="printPDF('client')">📄 طباعة للزبون</button>
+    <button class="btn btn-primary" onclick="copyPrompt()">📋 نسخ الـ Prompt</button>
+  </div>
+</div>
+</div>
+<script>
+var currentStep=0,totalSteps=7,currency='IQD',discType='pct',payPlan=null,manualOverride=false,manualIQD=0;
+var priceBase=0,pricePages=0,priceFeats=0,priceAddons=0;
+var USD_RATE=1310;
+function fmtIQD(v){if(!v||v===0)return'0 د.ع';if(v>=1000000)return(v/1000000).toFixed(v%1000000===0?0:2).replace(/\.?0+$/,'')+'  مليون د.ع';return v.toLocaleString('ar-IQ')+' د.ع';}
+function fmtUSD(v){return'$'+Math.round(v/USD_RATE).toLocaleString();}
+function fmt(v){return currency==='IQD'?fmtIQD(v):fmtUSD(v);}
+function setCurrency(c){currency=c;document.getElementById('btnIQD').classList.toggle('active',c==='IQD');document.getElementById('btnUSD').classList.toggle('active',c==='USD');recalcPrice();}
+function selectProjType(el,base){document.querySelectorAll('#projType .chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');priceBase=base;recalcPrice();}
+function togglePageChip(el){el.classList.toggle('selected');pricePages=[...document.querySelectorAll('#pages .chip.selected')].reduce((s,c)=>s+parseInt(c.dataset.p||0),0);recalcPrice();}
+function toggleFeatChip(el){el.classList.toggle('selected');el.dataset.fp=el.classList.contains('selected')?el.dataset.fp:0;priceFeats=[...document.querySelectorAll('#features .chip.selected')].reduce((s,c)=>s+parseInt(c.dataset.fp||0),0);recalcPrice();}
+function toggleAddon(el,price){el.classList.toggle('active-addon');el.dataset.ap=el.classList.contains('active-addon')?price:0;priceAddons=[...document.querySelectorAll('.addon-item.active-addon')].reduce((s,c)=>s+parseInt(c.dataset.ap||0),0);recalcPrice();}
+function setDiscType(t){discType=t;document.getElementById('discPctBtn').classList.toggle('active',t==='pct');document.getElementById('discIQDBtn').classList.toggle('active',t==='iqd');recalcPrice();}
+function selectPayPlan(el,plan){document.querySelectorAll('#paymentPlan .chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');payPlan=plan;recalcPrice();}
+function applyManualPrice(){var v=parseInt(document.getElementById('manualPrice').value)||0;manualIQD=v;manualOverride=true;recalcPrice();}
+function resetToCalculated(){manualOverride=false;manualIQD=0;document.getElementById('manualPrice').value='';recalcPrice();}
+function recalcPrice(){
+  var adminAdd=document.getElementById('needAdmin')&&document.getElementById('needAdmin').checked?100000:0;
+  var uiuxAdd=document.getElementById('needUIUX')&&document.getElementById('needUIUX').checked?80000:0;
+  var logoAdd=document.getElementById('needLogo')&&document.getElementById('needLogo').checked?50000:0;
+  var rawTotal=priceBase+pricePages+priceFeats+priceAddons+adminAdd+uiuxAdd+logoAdd;
+  var discVal=parseInt(document.getElementById('discountVal')&&document.getElementById('discountVal').value||0)||0;
+  // Discount base: manual price if active, otherwise the auto-calculated raw total
+  var discBase=manualOverride?manualIQD:rawTotal;
+  var discAmt=discType==='pct'?Math.round(discBase*discVal/100):discVal;
+  discAmt=Math.min(discAmt,discBase);
+  var autoCalc=Math.max(0,rawTotal-(discType==='pct'?Math.round(rawTotal*discVal/100):Math.min(discVal,rawTotal)));
+  var preInstallment=manualOverride?Math.max(0,manualIQD-discAmt):autoCalc;
+  // Installment surcharge: splitting payments adds a small risk/admin fee on top
+  var instPct=payPlan==='two'?3:payPlan==='three'?5:payPlan==='monthly'?8:0;
+  var instFee=Math.round(preInstallment*instPct/100);
+  var finalIQD=preInstallment+instFee;
+  var maint=Math.round(finalIQD*0.12);
+  var el=document.getElementById('autoCalcDisplay');if(el)el.textContent=fmtIQD(autoCalc);
+  var pt=document.getElementById('pmTotal');if(pt)pt.textContent=fmt(finalIQD);
+  var ps=document.getElementById('pmSub');if(ps)ps.textContent=finalIQD===0?'أكمل الاستمارة لحساب السعر':(currency==='USD'?'≈ '+fmtIQD(finalIQD):'≈ '+fmtUSD(finalIQD));
+  var pb=document.getElementById('pmBase');if(pb)pb.textContent=priceBase?fmt(priceBase):'—';
+  var pp=document.getElementById('pmPages');if(pp)pp.textContent=pricePages?fmt(pricePages):'—';
+  var pf=document.getElementById('pmFeats');if(pf)pf.textContent=(priceFeats+adminAdd+uiuxAdd+logoAdd)?fmt(priceFeats+adminAdd+uiuxAdd+logoAdd):'—';
+  var pa=document.getElementById('pmAddons');if(pa)pa.textContent=priceAddons?fmt(priceAddons):'—';
+  var pd=document.getElementById('pmDiscount');if(pd)pd.textContent=discAmt?'-'+fmt(discAmt):'—';
+  var pi=document.getElementById('pmInstallment');if(pi)pi.textContent=instFee?'+'+fmt(instFee):'—';
+  var pm=document.getElementById('pmMaint');if(pm)pm.textContent=finalIQD?fmt(maint)+'/شهر':'—';
+  var da=document.getElementById('discApplied');if(da)da.textContent=fmtIQD(discAmt);
+  var bf=document.getElementById('pmBarFill');if(bf)bf.style.width=Math.min(100,(finalIQD/2000000)*100)+'%';
+  renderPaymentPlan(finalIQD);
+  window._pricing={base:priceBase,pages:pricePages,feats:priceFeats+adminAdd+uiuxAdd+logoAdd,addons:priceAddons,discount:discAmt,installmentFee:instFee,installmentPct:instPct,finalIQD:finalIQD,maint:maint,rawTotal:rawTotal,manualOverride:manualOverride,discVal:discVal,discType:discType};
+}
+function renderPaymentPlan(total){
+  var det=document.getElementById('paymentPlanDetail');
+  var boxes=document.getElementById('paymentBoxes');
+  if(!payPlan||!total){if(det)det.style.display='none';return;}
+  var plans=[];
+  if(payPlan==='full')plans=[{n:'الدفع الكامل',p:100,d:'عند التوقيع'}];
+  if(payPlan==='two')plans=[{n:'الدفعة الأولى',p:50,d:'عند التوقيع'},{n:'الدفعة الثانية',p:50,d:'عند التسليم'}];
+  if(payPlan==='three')plans=[{n:'الأولى',p:40,d:'توقيع'},{n:'الثانية',p:30,d:'منتصف'},{n:'الثالثة',p:30,d:'تسليم'}];
+  if(payPlan==='monthly')plans=[{n:'الشهر 1',p:34,d:'أولى'},{n:'الشهر 2',p:33,d:'تطوير'},{n:'الشهر 3',p:33,d:'تسليم'}];
+  if(boxes)boxes.innerHTML=plans.map(function(pl){return'<div class="qp-box"><div class="qp-name">'+pl.n+'</div><div class="qp-pct">'+pl.d+' — '+pl.p+'%</div><div class="qp-amount">'+fmt(Math.round(total*pl.p/100))+'</div></div>';}).join('');
+  if(det)det.style.display='block';
+}
+function updateProgress(){var pct=(currentStep/totalSteps)*100;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressLabel').textContent=currentStep+' / '+totalSteps;}
+function goToStep(n){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.step-pill').forEach(function(p,i){p.classList.remove('active','done');if(i<n)p.classList.add('done');});
+  var s=document.getElementById('step-'+n);if(s)s.classList.add('active');
+  var pill=document.querySelector('[data-step="'+n+'"]');if(pill)pill.classList.add('active');
+  currentStep=n;updateProgress();
+  if(n===5)recalcPrice();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextStep(from){
+  if(from===0){var nm=document.getElementById('clientName').value.trim(),ph=document.getElementById('clientPhone').value.trim(),ok=true;setErr('f-name',!nm);if(!nm)ok=false;setErr('f-phone',!ph);if(!ph)ok=false;if(!ok)return;}
+  if(from===1){var pn=document.getElementById('projName').value.trim(),pt=document.querySelector('#projType .chip.selected'),pd=document.getElementById('projDesc').value.trim(),ok=true;setErr('f-projName',!pn);if(!pn)ok=false;setErr('f-projType',!pt);if(!pt)ok=false;setErr('f-projDesc',!pd);if(!pd)ok=false;if(!ok)return;}
+  goToStep(from+1);
+}
+function prevStep(from){goToStep(from-1);}
+function setErr(id,show){var el=document.getElementById(id);if(el)el.classList.toggle('has-error',show);}
+function selectChip(el,group){document.querySelectorAll('#'+group+' .chip').forEach(function(c){c.classList.remove('selected');});el.classList.add('selected');if(group==='deadline'){var fd=document.getElementById('f-specificDate');if(fd)fd.style.display=el.textContent.includes('تاريخ محدد')?'block':'none';}}
+function toggleChip(el){el.classList.toggle('selected');}
+function stripEmoji(s){return (s||'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}\uFE0F]/gu,'').replace(/\s*\(\s*[\d.,]+\s*k\s*\)/gi,'').replace(/\s{2,}/g,' ').trim();}
+function getSelected(id){return[...document.querySelectorAll('#'+id+' .chip.selected')].map(function(c){return stripEmoji(c.textContent.trim());}).join('، ')||'—';}
+function tog(id){var e=document.getElementById(id);return e&&e.checked?'نعم ✓':'لا';}
+function val(id){var e=document.getElementById(id);return e?e.value.trim()||'—':'—';}
+function generateSummary(){
+  recalcPrice();
+  var P=window._pricing||{};
+  var totalStr=fmt(P.finalIQD||0);
+  var totalIQD=P.finalIQD||0;
+  var dateStr=new Date().toLocaleDateString('ar-IQ',{year:'numeric',month:'long',day:'numeric'});
+  var qd=document.getElementById('quoteDate');if(qd)qd.textContent='التاريخ: '+dateStr;
+  var pd2=document.getElementById('printDate');if(pd2)pd2.textContent='التاريخ: '+dateStr;
+  var qtd=document.getElementById('quoteTotalDisplay');if(qtd)qtd.textContent=totalStr;
+  var lines=[['السعر الأساسي',fmt(P.base||0)],['الصفحات',fmt(P.pages||0)],['الميزات',fmt(P.feats||0)],['الإضافات',fmt(P.addons||0)]];
+  var lHTML=lines.filter(function(l){return(P.base||P.pages||P.feats||P.addons)&&l[1]!==fmt(0);}).map(function(l){return'<div class="ql-row"><span class="ql-label">'+l[0]+'</span><span class="ql-val">'+l[1]+'</span></div>';}).join('');
+  if(P.discount)lHTML+='<div class="ql-row"><span class="ql-label">الخصم</span><span class="ql-val" style="color:var(--red)">-'+fmt(P.discount)+'</span></div>';
+  if(P.installmentFee)lHTML+='<div class="ql-row"><span class="ql-label">رسوم التقسيط ('+P.installmentPct+'%)</span><span class="ql-val" style="color:var(--gold)">+'+fmt(P.installmentFee)+'</span></div>';
+  lHTML+='<div class="ql-row ql-total"><span class="ql-label">الإجمالي</span><span class="ql-val">'+totalStr+'</span></div>';
+  var ql=document.getElementById('quoteLines');if(ql)ql.innerHTML=lHTML;
+  var planBoxes='';
+  if(payPlan&&totalIQD){var plans=[];if(payPlan==='full')plans=[{n:'الدفع الكامل',p:100,d:'عند التوقيع'}];if(payPlan==='two')plans=[{n:'الأولى',p:50,d:'توقيع'},{n:'الثانية',p:50,d:'تسليم'}];if(payPlan==='three')plans=[{n:'الأولى',p:40,d:'توقيع'},{n:'الثانية',p:30,d:'منتصف'},{n:'الثالثة',p:30,d:'تسليم'}];if(payPlan==='monthly')plans=[{n:'الشهر 1',p:34,d:'أولى'},{n:'الشهر 2',p:33,d:'تطوير'},{n:'الشهر 3',p:33,d:'تسليم'}];planBoxes=plans.map(function(pl){return'<div class="qp-box"><div class="qp-name">'+pl.n+'</div><div class="qp-pct">'+pl.d+' — '+pl.p+'%</div><div class="qp-amount">'+fmt(Math.round(totalIQD*pl.p/100))+'</div></div>';}).join('');}
+  var qpb=document.getElementById('quotePlanBoxes');if(qpb)qpb.innerHTML=planBoxes;
+  var selectedAddons=[...document.querySelectorAll('.addon-item.active-addon')].map(function(a){return a.querySelector('.addon-name').textContent;}).join('، ')||'—';
+  var sections=[
+    {t:'معلومات الزبون',c:true,r:[['الاسم',val('clientName')],['الهاتف',val('clientPhone')],['الإيميل',val('clientEmail')],['الشركة',val('clientCompany')],['التواصل',getSelected('contactMethod')]]},
+    {t:'المشروع',c:true,r:[['الاسم',val('projName')],['الحالة',getSelected('projStatus')],['النوع',getSelected('projType')],['الوصف',val('projDesc')],['الجمهور',val('projAudience')],['مراجع',val('projRef')]]},
+    {t:'الصفحات',c:true,r:[['الصفحات',getSelected('pages')],['إضافية',val('extraPages')],['أدوار المستخدمين',getSelected('userRoles')],['المحتوى',getSelected('contentType')],['اللغات',getSelected('siteLanguages')]]},
+    {t:'التقني (داخلي)',c:false,r:[['الميزات',getSelected('features')],['Admin Panel',tog('needAdmin')],['بيئة التطوير',getSelected('devEnv')],['التقنيات',getSelected('techStack')],['الاستضافة',getSelected('hosting')]]},
+    {t:'التصميم',c:true,r:[['الأسلوب',getSelected('designStyle')],['الألوان',val('brandColors')],['UI/UX مخصص',tog('needUIUX')],['تصميم لوغو',tog('needLogo')],['لوغو موجود',tog('hasLogo'),true],['محتوى جاهز',tog('hasContent'),true],['دومين موجود',tog('hasDomain'),true]]},
+    {t:'التسعير',c:true,r:[['الإجمالي',totalStr+(currency==='USD'?' ('+fmtIQD(totalIQD)+')':'')],['نوع السعر',P.manualOverride?'يدوي':'محسوب تلقائياً',true],['الإضافات',selectedAddons],['الخصم',P.discount?fmt(P.discount):'لا يوجد'],['رسوم التقسيط',P.installmentFee?fmt(P.installmentFee)+' ('+P.installmentPct+'%)':'لا يوجد'],['صيانة مقترحة',fmt(P.maint||0)+'/شهر'],['خطة الدفع',getSelected('paymentPlan')],['موعد التسليم',getSelected('deadline')],['تاريخ محدد',val('specificDate')]]},
+    {t:'إضافات مخصصة طلبها الزبون',c:true,r:getCustomFields()},
+    {t:'ملاحظات داخلية وتحليل تنافسي',c:false,r:[['الأولويات',getSelected('priorities')],['المنافسون',val('competitors')],['قيود',getSelected('restrictions')],['ملاحظات',val('extraNotes')]]}
+  ];
+  var html='';sections.forEach(function(s){html+='<div class="summary-card'+(s.c?'':' internal-only')+'"><h3>'+s.t+'</h3>';s.r.forEach(function(r){if(r[1]&&r[1]!=='—')html+='<div class="summary-row'+(r[2]?' internal-only':'')+'"><span class="summary-key">'+r[0]+'</span><span class="summary-val">'+r[1]+'</span></div>';});html+='</div>';});
+  var sc=document.getElementById('summaryContent');if(sc)sc.innerHTML=html;
+  var prompt='You are an expert senior full-stack engineer working inside an agentic IDE (Google Antigravity). Treat the brief below as a real client contract. Do not skip steps, do not invent requirements that contradict it, and ask me a clarifying question ONLY if something critical is truly missing — otherwise make sensible professional decisions and proceed.\n\n# PROJECT BRIEF — '+val('projName')+'\nPrepared by: Webni — '+dateStr+'\n\n## 1) CLIENT\n- Name: '+val('clientName')+' | Phone: '+val('clientPhone')+' | Email: '+val('clientEmail')+'\n- Company: '+val('clientCompany')+' | Preferred contact: '+getSelected('contactMethod')+'\n\n## 2) PROJECT OVERVIEW\n- Status: '+getSelected('projStatus')+'\n- Type: '+getSelected('projType')+'\n- Description: '+val('projDesc')+'\n- Target audience: '+val('projAudience')+'\n- Reference sites/apps client likes: '+val('projRef')+'\n\n## 3) STRUCTURE & CONTENT\n- Pages: '+getSelected('pages')+'\n- Extra pages: '+val('extraPages')+'\n- User roles/permissions: '+getSelected('userRoles')+'\n- Content type: '+getSelected('contentType')+'\n- Languages (incl. RTL/LTR handling): '+getSelected('siteLanguages')+'\n\n## 4) TECHNICAL REQUIREMENTS\n- Required features: '+getSelected('features')+'\n- Admin panel needed: '+tog('needAdmin')+'\n- Dev environment: '+getSelected('devEnv')+'\n- Preferred tech stack: '+getSelected('techStack')+'\n- Hosting target: '+getSelected('hosting')+'\n\n## 5) DESIGN & BRANDING\n- Visual style: '+getSelected('designStyle')+'\n- Brand colors: '+val('brandColors')+'\n- Custom UI/UX design pass needed: '+tog('needUIUX')+'\n- Logo design needed: '+tog('needLogo')+' | Has existing logo: '+tog('hasLogo')+'\n- Has ready content (text/images): '+tog('hasContent')+' | Has domain: '+tog('hasDomain')+'\n\n## 6) BUDGET, ADD-ONS & TIMELINE (context only — do not display to end users)\n- Agreed price: '+totalStr+' ('+fmtIQD(totalIQD)+')\n- Included add-ons: '+selectedAddons+'\n- Payment plan: '+getSelected('paymentPlan')+'\n- Deadline: '+getSelected('deadline')+(val('specificDate')!=='—'?' (target date: '+val('specificDate')+')':'')+'\n\n## 7) PRIORITIES, CONSTRAINTS & NOTES\n- Client priorities (in order of importance): '+getSelected('priorities')+'\n- Known competitors: '+val('competitors')+'\n- Hard constraints: '+getSelected('restrictions')+'\n- Additional notes: '+val('extraNotes')+'\n- Custom client-requested items: '+(customFieldsText('; ')||'None')+'\n\n---\n## YOUR TASK\n1. Restate the project in 3-4 lines to confirm you understood the goal and the client\'s top priorities.\n2. Propose the final tech stack (confirm or improve on the client\'s preference) and a clean folder/file architecture.\n3. List the pages/screens and data models needed, derived strictly from sections 3 and 4 above.\n4. Implement the project incrementally, one logical module/file at a time — do not dump everything in one giant response. After each module, briefly state what you built and what\'s next.\n5. Apply the design direction from section 5 consistently (colors, style, RTL support if Arabic is involved).\n6. Follow the constraints in section 7 strictly and reflect the stated priorities in your technical decisions.\n7. Write production-quality, secure, well-commented code with sensible error handling — no placeholders like "TODO" left for critical logic.\n8. At the end, give a short checklist of what was delivered vs. what the client still needs to provide (e.g. real content, API keys, domain access).\n\nBegin now with step 1 (confirmation) and step 2 (architecture proposal), then continue building.';
+  var swn=document.getElementById('sendWaNumber');if(swn&&!swn.value){var ph=val('clientPhone');if(ph!=='—')swn.value=ph.replace(/[^0-9+]/g,'');}
+  var set=document.getElementById('sendEmailTo');if(set&&!set.value){var em=val('clientEmail');if(em!=='—')set.value=em;}
+  window._quoteSummary='*عرض سعر مشروع من Webni*\n\nالزبون: '+val('clientName')+'\nالمشروع: '+val('projName')+'\nالنوع: '+getSelected('projType')+'\n\nالسعر الإجمالي: '+totalStr+' ('+fmtIQD(totalIQD)+')\nموعد التسليم: '+getSelected('deadline')+'\nخطة الدفع: '+getSelected('paymentPlan')+'\n\nشكراً لتعاملكم مع Webni 🙏';
+  window._teamSummary='*🆕 طلب مشروع جديد — Webni*\n\n👤 الزبون: '+val('clientName')+' | '+val('clientPhone')+' | '+val('clientEmail')+'\nالشركة: '+val('clientCompany')+'\n\n💡 المشروع: '+val('projName')+' ('+getSelected('projType')+')\nالوصف: '+val('projDesc')+'\n\n⚙️ التقني: '+getSelected('features')+' | بيئة: '+getSelected('devEnv')+' | تقنيات: '+getSelected('techStack')+' | استضافة: '+getSelected('hosting')+'\n\n🎨 التصميم: '+getSelected('designStyle')+' | ألوان: '+val('brandColors')+'\n\n💰 السعر: '+totalStr+' ('+fmtIQD(totalIQD)+')'+(P.manualOverride?' [سعر يدوي]':' [محسوب تلقائياً]')+'\nالخصم: '+(P.discount?fmt(P.discount):'لا يوجد')+' | رسوم تقسيط: '+(P.installmentFee?fmt(P.installmentFee)+' ('+P.installmentPct+'%)':'لا يوجد')+'\nخطة الدفع: '+getSelected('paymentPlan')+' | التسليم: '+getSelected('deadline')+'\n\n📋 الأولويات: '+getSelected('priorities')+'\nالمنافسون: '+val('competitors')+'\nقيود: '+getSelected('restrictions')+'\nملاحظات: '+val('extraNotes')+(customFieldsText()?'\n\n➕ إضافات مخصصة: '+customFieldsText():'');
+  var ap=document.getElementById('aiPrompt');if(ap)ap.textContent=prompt;
+  var contractNo='WB-'+new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0')+String(new Date().getDate()).padStart(2,'0')+'-'+Math.floor(Math.random()*900+100);
+  var cb=document.getElementById('contractBlock');
+  if(cb){
+    var addonsLine=customFieldsText()?'<tr><td style="padding:6px 8px;color:#6B7280;border-bottom:1px solid #EFEBE2">الإضافات المتفق عليها</td><td style="padding:6px 8px;font-weight:600;border-bottom:1px solid #EFEBE2">'+customFieldsText()+'</td></tr>':'';
+    var discountLine=P.discount?'<tr><td style="padding:6px 8px;color:#6B7280;border-bottom:1px solid #EFEBE2">الخصم الممنوح</td><td style="padding:6px 8px;font-weight:600;color:#8A6D3B;border-bottom:1px solid #EFEBE2">- '+fmt(P.discount)+'</td></tr>':'';
+    var installLine=P.installmentFee?'<tr><td style="padding:6px 8px;color:#6B7280;border-bottom:1px solid #EFEBE2">رسوم التقسيط</td><td style="padding:6px 8px;font-weight:600;border-bottom:1px solid #EFEBE2">+ '+fmt(P.installmentFee)+' ('+P.installmentPct+'%)</td></tr>':'';
+    function clause(num,title,bodyHtml){
+      return '<div style="margin-bottom:14px">'+
+        '<table style="width:100%;border-collapse:collapse" cellpadding="0" cellspacing="0"><tr>'+
+          '<td style="width:30px;vertical-align:top;padding-top:1px"><div style="width:24px;height:24px;border:1px solid #1B2A4A;border-radius:50%;text-align:center;line-height:24px;font-size:8.5pt;font-weight:700;color:#1B2A4A">'+num+'</div></td>'+
+          '<td style="vertical-align:top;padding-right:10px">'+
+            '<div style="font-size:9.5pt;font-weight:800;color:#1B2A4A;margin-bottom:6px">'+title+'</div>'+
+            '<div style="font-size:9pt;line-height:1.85;color:#2C3645">'+bodyHtml+'</div>'+
+          '</td>'+
+        '</tr></table>'+
+      '</div>';
+    }
+    cb.innerHTML=
+      '<div style="border:1px solid #D8D2C4;border-radius:6px;overflow:hidden;font-family:Tajawal,sans-serif;direction:rtl">'+
+      // ── ترويسة العقد ──
+      '<div style="background:#1B2A4A;padding:0">'+
+        '<table style="width:100%;border-collapse:collapse" cellpadding="0" cellspacing="0"><tr>'+
+          '<td style="padding:22px 26px;vertical-align:middle;text-align:right">'+
+            '<div style="color:#fff;font-size:16pt;font-weight:800;letter-spacing:.3px">Webni — ويبني</div>'+
+            '<div style="color:rgba(255,255,255,.65);font-size:8.5pt;margin-top:4px">webni.pythonanywhere.com</div>'+
+          '</td>'+
+          '<td style="padding:22px 26px;vertical-align:middle;text-align:left;white-space:nowrap">'+
+            '<div style="font-size:8pt;font-weight:700;color:#C9A063;letter-spacing:.4px">عقد خدمات برمجية</div>'+
+            '<div style="font-size:9pt;color:#fff;margin-top:4px">'+contractNo+'</div>'+
+            '<div style="font-size:8pt;color:rgba(255,255,255,.65);margin-top:1px">'+dateStr+'</div>'+
+          '</td>'+
+        '</tr></table>'+
+        '<div style="height:1px;background:#C9A063"></div>'+
+      '</div>'+
+      // ── أطراف العقد ──
+      '<div style="background:#F7F5F0;padding:18px 22px;border-bottom:1px solid #D8D2C4">'+
+        '<div style="font-size:8pt;font-weight:700;color:#8A6D3B;letter-spacing:.4px;margin-bottom:12px">أطراف العقد</div>'+
+        '<table style="width:100%;border-collapse:collapse" cellpadding="0" cellspacing="0"><tr>'+
+          '<td style="width:50%;padding-left:8px;vertical-align:top">'+
+            '<div style="background:#fff;border:1px solid #D8D2C4;border-radius:5px;padding:13px 14px">'+
+              '<div style="font-size:8pt;font-weight:700;color:#8A6D3B;letter-spacing:.3px;margin-bottom:7px">الطرف الأول — مقدم الخدمة</div>'+
+              '<div style="font-size:9.5pt;font-weight:700;color:#1B2A4A">Webni — ويبني</div>'+
+              '<div style="font-size:8.5pt;color:#6B7280;margin-top:4px">webni.pythonanywhere.com</div>'+
+              '<div style="font-size:8.5pt;color:#6B7280">النجف الأشرف، العراق</div>'+
+            '</div>'+
+          '</td>'+
+          '<td style="width:50%;padding-right:8px;vertical-align:top">'+
+            '<div style="background:#fff;border:1px solid #D8D2C4;border-radius:5px;padding:13px 14px">'+
+              '<div style="font-size:8pt;font-weight:700;color:#8A6D3B;letter-spacing:.3px;margin-bottom:7px">الطرف الثاني — الزبون</div>'+
+              '<div style="font-size:9.5pt;font-weight:700;color:#1B2A4A">'+val('clientName')+'</div>'+
+              (val('clientCompany')!=='—'?'<div style="font-size:8.5pt;color:#6B7280;margin-top:4px">'+val('clientCompany')+'</div>':'')+
+              '<div style="font-size:8.5pt;color:#6B7280">'+val('clientPhone')+'</div>'+
+              (val('clientEmail')!=='—'?'<div style="font-size:8.5pt;color:#6B7280">'+val('clientEmail')+'</div>':'')+
+            '</div>'+
+          '</td>'+
+        '</tr></table>'+
+      '</div>'+
+      // ── بنود العقد ──
+      '<div style="padding:22px 24px">'+
+        '<div style="font-size:8pt;font-weight:700;color:#8A6D3B;letter-spacing:.4px;margin-bottom:16px">بنود العقد</div>'+
+        clause('١','موضوع العقد','يتعهد الطرف الأول بتصميم وتطوير وتسليم مشروع برمجي بعنوان «<strong>'+val('projName')+'</strong>» من نوع (<strong>'+getSelected('projType')+'</strong>)'+(val('projDesc')!=='—'?'، ويتضمن: '+val('projDesc'):'')+'، وفق المتطلبات المتفق عليها في هذا العقد.')+
+        clause('٢','نطاق العمل','<strong>الصفحات:</strong> '+getSelected('pages')+(val('extraPages')!=='—'?'، '+val('extraPages'):'')+'.<br/><strong>التصميم:</strong> '+getSelected('designStyle')+(val('brandColors')!=='—'?' بألوان '+val('brandColors'):'')+'.'+(customFieldsText()?'<br/><strong>إضافات متفق عليها:</strong> '+customFieldsText()+'.':''))+
+        clause('٣','القيمة المالية وطريقة الدفع',
+          '<table style="width:100%;border-collapse:collapse;font-size:9pt;margin-top:2px">'+
+            '<tr><td style="padding:6px 8px;color:#6B7280;border-bottom:1px solid #EFEBE2">القيمة الإجمالية</td><td style="padding:6px 8px;font-weight:800;font-size:12pt;color:#1B2A4A;border-bottom:1px solid #EFEBE2">'+totalStr+(currency==='USD'?' <span style="font-size:8pt;color:#9CA3AF;font-weight:400">('+fmtIQD(totalIQD)+')</span>':'')+'</td></tr>'+
+            discountLine+installLine+addonsLine+
+            '<tr><td style="padding:6px 8px;color:#6B7280">خطة الدفع</td><td style="padding:6px 8px;font-weight:600">'+getSelected('paymentPlan')+'</td></tr>'+
+          '</table>'+
+          '<div style="font-size:8pt;color:#9CA3AF;margin-top:9px;border-top:1px dashed #E5E1D8;padding-top:7px">لا تشمل القيمة أي خدمات أو تعديلات خارج نطاق البند الثاني.</div>')+
+        clause('٤','مدة التنفيذ','يلتزم الطرف الأول بتسليم المشروع خلال: <strong>'+getSelected('deadline')+'</strong>'+(val('specificDate')!=='—'?' (الموعد المحدد: <strong>'+val('specificDate')+'</strong>)':'')+'. مع إمكانية التمديد بالتفاهم المتبادل في حال وجود تعديلات جوهرية خارج النطاق الأصلي.')+
+        clause('٥','التعديلات والملكية والسرية','• التعديلات ضمن النطاق المتفق عليه مجانية؛ ما يخرج عنه يُحتسب إضافة بالتراضي.<br/>• تنتقل ملكية المشروع للزبون بعد استلام كامل المستحقات المالية.<br/>• يلتزم الطرفان بسرية المعلومات المتبادلة خلال تنفيذ العقد.')+
+        '<div style="background:#F7F5F0;border:1px solid #D8D2C4;border-right:3px solid #C9A063;border-radius:4px;padding:13px 16px;margin:20px 0;font-size:8.5pt;color:#5B5346;line-height:1.7"><strong style="color:#1B2A4A">تنبيه:</strong> هذا العقد ملزم لكلا الطرفين بعد التوقيع. أي تعديل يستوجب موافقة خطية.</div>'+
+        '<table style="width:100%;margin-top:30px;border-collapse:collapse" cellpadding="0" cellspacing="0">'+
+          '<tr>'+
+            '<td style="width:50%;text-align:center;padding-left:14px;vertical-align:top"><div style="font-size:8.5pt;font-weight:700;color:#1B2A4A;letter-spacing:.3px;margin-bottom:24px">توقيع الطرف الأول</div><div style="border-bottom:1px solid #B8B2A4;height:30px;margin-bottom:7px"></div><div style="font-size:8.5pt;color:#5B6270">Webni — ويبني</div><div style="font-size:8pt;color:#9CA3AF;margin-top:2px">التاريخ: ............</div></td>'+
+            '<td style="width:50%;text-align:center;padding-right:14px;vertical-align:top"><div style="font-size:8.5pt;font-weight:700;color:#1B2A4A;letter-spacing:.3px;margin-bottom:24px">توقيع الطرف الثاني</div><div style="border-bottom:1px solid #B8B2A4;height:30px;margin-bottom:7px"></div><div style="font-size:8.5pt;color:#5B6270">'+val('clientName')+'</div><div style="font-size:8pt;color:#9CA3AF;margin-top:2px">التاريخ: ............</div></td>'+
+          '</tr>'+
+        '</table>'+
+        '<div style="text-align:center;margin-top:20px;padding-top:13px;border-top:1px solid #E5E1D8;font-size:7.5pt;color:#B0AA9C">Webni © '+new Date().getFullYear()+' — webni.pythonanywhere.com | العراق — النجف الأشرف</div>'+
+      '</div>'+
+      '</div>';
+  }
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.step-pill').forEach(function(p){p.classList.remove('active');p.classList.add('done');});
+  var ss=document.getElementById('summary-section');if(ss)ss.classList.add('active');
+  document.getElementById('progressFill').style.width='100%';
+  document.getElementById('progressLabel').textContent='7 / 7';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function sendWhatsApp(){
+  var num=(document.getElementById('sendWaNumber').value||'').replace(/[^0-9]/g,'');
+  var text=window._quoteSummary||'';
+  if(!num){alert('الرجاء إدخال رقم واتساب الزبون مع كود الدولة (مثال: 9647xxxxxxxx)');return;}
+  window.open('https://wa.me/'+num+'?text='+encodeURIComponent(text),'_blank');
+}
+function sendEmailQuote(){
+  var to=document.getElementById('sendEmailTo').value||'';
+  var text=window._quoteSummary||'';
+  var subject='عرض سعر مشروعك من Webni';
+  window.location.href='mailto:'+to+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(text);
+}
+function copyTeamSummary(){
+  var text=window._teamSummary||'';
+  if(!text){alert('الرجاء إنشاء العرض أولاً.');return;}
+  function showOk(){var b=document.querySelector('[onclick="copyTeamSummary()"]');if(b){var orig=b.textContent;b.textContent='✅ تم النسخ — الصقه بمجموعة الفريق';setTimeout(function(){b.textContent=orig;},2500);}}
+  function fallback(){
+    var ta=document.createElement('textarea');
+    ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
+    document.body.appendChild(ta);ta.focus();ta.select();
+    try{var ok=document.execCommand('copy');document.body.removeChild(ta);if(ok)showOk();else alert('تعذر النسخ التلقائي. حدد النص ونسخه يدوياً.');}
+    catch(e){document.body.removeChild(ta);alert('تعذر النسخ التلقائي. حدد النص ونسخه يدوياً.');}
+  }
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(showOk).catch(fallback);}else{fallback();}
+}
+function copyPrompt(){
+  var ap=document.getElementById('aiPrompt');if(!ap)return;
+  var text=ap.textContent;
+  function showSuccess(){document.querySelectorAll('.copy-btn,.btn-primary').forEach(function(b){if(b.textContent.indexOf('نسخ')>-1){var orig=b.textContent;b.textContent='✅ تم النسخ!';setTimeout(function(){b.textContent=orig;},2000);}});}
+  function fallbackCopy(){
+    var ta=document.createElement('textarea');
+    ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';ta.style.top='0';
+    document.body.appendChild(ta);ta.focus();ta.select();
+    try{var ok=document.execCommand('copy');document.body.removeChild(ta);if(ok){showSuccess();}else{alert('تعذر النسخ التلقائي. الرجاء تحديد النص ونسخه يدوياً (Ctrl+C).');}}
+    catch(e){document.body.removeChild(ta);alert('تعذر النسخ التلقائي. الرجاء تحديد النص ونسخه يدوياً (Ctrl+C).');}
+  }
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(text).then(showSuccess).catch(fallbackCopy);
+  }else{
+    fallbackCopy();
+  }
+}
+var _origTitle=document.title;
+function printPDF(mode){
+  mode=mode||'internal';
+  document.body.classList.remove('print-mode-internal','print-mode-client');
+  document.body.classList.add('print-mode-'+mode);
+  var pd=document.getElementById('printDate');
+  if(pd)pd.textContent='التاريخ: '+new Date().toLocaleDateString('ar-IQ',{year:'numeric',month:'long',day:'numeric'});
+  var cName=val('clientName');if(cName==='—')cName='زبون';
+  var pName=val('projName');if(pName==='—')pName='مشروع';
+  var suffix=mode==='client'?'عرض-سعر':'داخلي';
+  var fileTitle=(cName+'-'+pName+'-'+suffix).replace(/[\\/:*?"<>|]/g,'').replace(/\s+/g,'-');
+  document.title=fileTitle;
+  window.print();
+  setTimeout(function(){document.title=_origTitle;},800);
+}
+window.addEventListener('afterprint',function(){document.title=_origTitle;});
+
+// ── تيليجرام مباشر للقناة ─────────────────────────────────
+var TELEGRAM_CHANNEL='https://t.me/webni_dev/5';
+function openTelegramChannel(){
+  var clientText=window._quoteSummary||'';
+  var teamText=window._teamSummary||'';
+  var st=document.getElementById('tgDirectStatus');
+  if(!clientText&&!teamText){
+    if(st){st.textContent='⚠️ الرجاء إنشاء العرض أولاً (اضغط زر إنشاء العرض)';st.style.color='#e17055';}
+    return;
+  }
+  // دمج الرسالتين في رسالة واحدة
+  var P=window._pricing||{};
+  var pmTotal=document.getElementById('pmTotal');
+  var totalStr=pmTotal?pmTotal.textContent:'—';
+  var combined=
+    '━━━━━━━━━━━━━━━━━━━━━━\n'+
+    '🆕 *طلب مشروع جديد — Webni*\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━\n\n'+
+    '📋 *ملخص الفريق الداخلي:*\n'+
+    teamText+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━\n'+
+    '📄 *نسخة عرض السعر للزبون:*\n'+
+    clientText+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━\n'+
+    '📎 *الملفات المرفقة:*\n'+
+    '• PDF الزبون (عرض السعر الرسمي)\n'+
+    '• PDF الداخلي (ملخص الفريق)\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━';
+  // نسخ الرسالة للحافظة
+  function doOpen(){
+    window.open(TELEGRAM_CHANNEL,'_blank');
+    if(st){st.textContent='✅ القناة فُتحت — الصق الرسالة (Ctrl+V) وأرفق الـ PDFs';st.style.color='#00b894';}
+  }
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(combined).then(function(){
+      if(st){st.textContent='📋 تم نسخ الرسالة — جاري فتح القناة...';st.style.color='#229ed9';}
+      setTimeout(doOpen,600);
+    }).catch(function(){
+      // fallback
+      var ta=document.createElement('textarea');
+      ta.value=combined;ta.style.position='fixed';ta.style.left='-9999px';
+      document.body.appendChild(ta);ta.focus();ta.select();
+      try{document.execCommand('copy');}catch(e){}
+      document.body.removeChild(ta);
+      doOpen();
+    });
+  }else{
+    var ta=document.createElement('textarea');
+    ta.value=combined;ta.style.position='fixed';ta.style.left='-9999px';
+    document.body.appendChild(ta);ta.focus();ta.select();
+    try{document.execCommand('copy');}catch(e){}
+    document.body.removeChild(ta);
+    doOpen();
+  }
+}
+// ──────────────────────────────────────────────────────────
+
+// ── بوت تيليجرام — يولّد PDF تلقائياً ويرسل الثلاثة دفعة واحدة ──
+var BACKEND_URL='https://webni.pythonanywhere.com/submit';
+
+// بناء عنصر HTML نظيف لتوليد PDF منه
+// ── بناء محتوى HTML نظيف مستقل للـ PDF ──
+function buildPdfHtml(mode){
+  var dateStr=new Date().toLocaleDateString('ar-IQ',{year:'numeric',month:'long',day:'numeric'});
+  var isClient=(mode==='client');
+
+  var quoteCardEl=document.querySelector('#summary-section .quote-card');
+  var summaryContentEl=document.getElementById('summaryContent');
+  var contractBlockEl=document.getElementById('contractBlock');
+
+  var quoteCardHtml = (quoteCardEl && !isClient) ? quoteCardEl.outerHTML : '';
+  var summaryHtml   = (summaryContentEl && !isClient) ? summaryContentEl.innerHTML : '';
+  var contractHtml  = (contractBlockEl && isClient)  ? contractBlockEl.innerHTML  : '';
+
+  var headerSub = isClient
+    ? 'وثيقة رسمية مُعدّة خصيصاً لكم — يرجى المراجعة والتوقيع'
+    : 'نسخة داخلية لاستخدام فريق Webni فقط';
+
+  var bodyContent = '';
+  if(isClient){
+    if(!contractHtml||contractHtml.trim().length<20) return null;
+    bodyContent = '<div>'+contractHtml+'</div>';
+  } else {
+    if((!quoteCardHtml||quoteCardHtml.trim().length<20)&&(!summaryHtml||summaryHtml.trim().length<20)) return null;
+    bodyContent = (quoteCardHtml||'')+'<div style="margin-top:14px">'+(summaryHtml||'')+'</div>';
+  }
+
+  // CSS كامل مضمّن — هوية كلاسيكية هادئة (كحلي / كريمي / برونزي) بدل الألوان الصاخبة
+  var css = "@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap');\n"
+  + "html,body{background:#ffffff!important;color:#1f2430!important;margin:0;padding:0;width:794px!important;max-width:794px!important;overflow-x:hidden!important;}\n"
+  + "*{box-sizing:border-box;font-family:'Tajawal','Segoe UI','Arial Unicode MS',Tahoma,Arial,sans-serif;max-width:100%;}\n"
+  + "body{direction:rtl;font-size:10pt;line-height:1.7;letter-spacing:.1px;padding:14mm 13mm 16mm;background:#fff!important;}\n"
+  // ── الهيدر: ترويسة رسمية هادئة بخط مزدوج بدل صندوق أزرق صاخب ──
+  + ".pdf-header{padding:0 0 14px;margin-bottom:20px;border-bottom:2px solid #1B2A4A;}\n"
+  + ".pdf-header-rule{height:1px;background:#C9A063;margin-top:4px;}\n"
+  + ".pdf-header-top{width:100%;}\n"
+  + ".pdf-header-top::after{content:'';display:table;clear:both;}\n"
+  + ".pdf-brand{float:right;text-align:right;}\n"
+  + ".pdf-brand .name{font-size:15pt;font-weight:800;color:#1B2A4A;letter-spacing:.3px;}\n"
+  + ".pdf-brand .url{font-size:8pt;color:#6B7280;margin-top:3px;}\n"
+  + ".pdf-meta{float:left;text-align:left;font-size:8pt;color:#6B7280;}\n"
+  + ".pdf-meta .doctitle{font-size:9.5pt;font-weight:700;color:#1B2A4A;margin-bottom:3px;}\n"
+  + ".pdf-header .sub{display:block;font-size:8.5pt;font-weight:600;color:#8A6D3B;margin-top:10px;clear:both;}\n"
+  + ".pdf-footer{text-align:center;font-size:7.5pt;color:#9CA3AF;margin-top:18px;padding-top:8px;border-top:1px solid #E5E1D8;}\n"
+  // quote-card — بطاقة الإجمالي بخط هادئ بدل الأخضر الفسفوري
+  + ".quote-card{background:#F7F5F0!important;border:1px solid #D8D2C4!important;border-radius:4px;padding:18px 16px;margin-bottom:18px;overflow:hidden;}\n"
+  + ".quote-header{width:100%;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #D8D2C4;}\n"
+  + ".quote-header::after{content:'';display:table;clear:both;}\n"
+  + ".quote-title{font-size:13.5pt;font-weight:800;color:#1B2A4A!important;float:right;text-align:right;}\n"
+  + ".quote-subtitle{font-size:9.5px;color:#6B7280!important;margin-top:3px;float:right;clear:right;text-align:right;width:100%;}\n"
+  + ".quote-total-box{background:#fff!important;border:1px solid #C9A063!important;border-radius:4px;padding:9px 18px;text-align:center;float:left;}\n"
+  + ".quote-total-label{font-size:8px;letter-spacing:.4px;color:#8A6D3B!important;}\n"
+  + ".quote-total-val{font-size:17pt;font-weight:800;color:#1B2A4A!important;}\n"
+  + ".ql-row{display:table;width:100%;padding:5px 0;border-bottom:1px solid #E5E1D8;font-size:10.5px;table-layout:fixed;}\n"
+  + ".ql-label{display:table-cell;text-align:right;color:#5B6270!important;width:60%;}\n"
+  + ".ql-val{display:table-cell;text-align:left;color:#1f2430!important;font-weight:600;width:40%;}\n"
+  + ".ql-total{font-size:12.5px!important;font-weight:800!important;color:#1B2A4A!important;border-top:1.5px solid #1B2A4A!important;border-bottom:none!important;padding-top:9px!important;margin-top:2px;}\n"
+  + ".pay-grid{width:100%;margin-top:12px;}\n"
+  + ".pay-grid::after{content:'';display:table;clear:both;}\n"
+  + ".qp-box{background:#fff!important;border:1px solid #D8D2C4;border-radius:4px;padding:7px 8px;text-align:center;float:right;width:31%;margin-left:2%;margin-bottom:6px;}\n"
+  + ".qp-name{font-size:8.5px;color:#6B7280!important;margin-bottom:2px;}\n"
+  + ".qp-pct{font-size:8.5px;color:#8A8378!important;margin-bottom:2px;}\n"
+  + ".qp-amount{font-size:11.5px;font-weight:800;color:#8A6D3B!important;}\n"
+  // summary cards — لوحة هادئة بخط كحلي بدل الأزرق الفاقع
+  + ".summary-card{background:#fff!important;border:1px solid #E5E1D8!important;margin-bottom:10px;padding:12px 14px;border-radius:4px;overflow:hidden;}\n"
+  + ".summary-card h3{color:#1B2A4A!important;border-bottom:1px solid #E5E1D8;padding-bottom:5px;margin-bottom:7px;font-size:10pt;font-weight:700;}\n"
+  + ".summary-row{display:table;width:100%;padding:3px 0;border-bottom:1px solid #F2F0EA;table-layout:fixed;}\n"
+  + ".summary-key{display:table-cell;text-align:right;font-size:9px;color:#8A8378!important;width:35%;vertical-align:top;}\n"
+  + ".summary-val{display:table-cell;text-align:right;font-size:10px;color:#1f2430!important;word-break:break-word;width:65%;vertical-align:top;}\n"
+  + ".internal-only{display:"+(isClient?'none':'block')+"!important;}\n"
+  // إخفاء عناصر التفاعل
+  + "button,input,select,textarea,.no-print,.btn-row,.prompt-box{display:none!important;}\n";
+
+  var docTag = isClient ? 'عقد خدمات' : 'عرض سعر داخلي';
+  var fullHtml = '<!DOCTYPE html><html lang="ar" dir="rtl"><head>'
+    +'<meta charset="UTF-8"/>'
+    +'<link rel="preconnect" href="https://fonts.googleapis.com"/>'
+    +'<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>'
+    +'<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>'
+    +'<style>'+css+'</style>'
+    +'</head><body>'
+    +'<div class="pdf-header">'
+      +'<div class="pdf-header-top">'
+        +'<div class="pdf-brand"><div class="name">Webni — ويبني</div><div class="url">webni.pythonanywhere.com</div></div>'
+        +'<div class="pdf-meta"><div class="doctitle">'+docTag+'</div><div>'+dateStr+'</div></div>'
+      +'</div>'
+      +'<div class="pdf-header-rule"></div>'
+      +'<span class="sub">'+headerSub+'</span>'
+    +'</div>'
+    +bodyContent
+    +'<div class="pdf-footer">Webni — ويبني &nbsp;|&nbsp; webni.pythonanywhere.com &nbsp;|&nbsp; هذا العرض صالح لمدة 14 يوم من تاريخه</div>'
+    +'</body></html>';
+
+  return fullHtml;
+}
+
+function generatePdfBlob(mode){
+  return new Promise(function(resolve,reject){
+    var htmlStr=buildPdfHtml(mode);
+    if(!htmlStr){
+      reject(new Error(mode==='client'
+        ? 'العقد فارغ — الرجاء إنشاء العرض أولاً'
+        : 'عرض السعر فارغ — الرجاء إنشاء العرض أولاً'));
+      return;
+    }
+
+    // iframe معزول بالكامل عن CSS الصفحة الداكنة
+    var iframe=document.createElement('iframe');
+    iframe.style.cssText='position:fixed;top:0;left:-9999px;width:794px;height:200px;border:none;opacity:0;pointer-events:none;';
+    document.body.appendChild(iframe);
+
+    // كتابة HTML في الـ iframe
+    var iWin=iframe.contentWindow;
+    var iDoc=iframe.contentDocument||iWin.document;
+    iDoc.open('text/html','replace');
+    iDoc.write(htmlStr);
+    iDoc.close();
+
+    // انتظر رسم الصفحة وتحميل الخط
+    setTimeout(function(){
+      // ضبط الارتفاع الفعلي لالتقاط كل المحتوى
+      var h=iDoc.body.scrollHeight||iDoc.documentElement.scrollHeight||800;
+      iframe.style.height=(h+200)+'px';
+      iframe.style.width='794px';
+      // اعطِ وقتاً إضافياً للخط
+      setTimeout(function(){
+        var h2=iDoc.body.scrollHeight||iDoc.documentElement.scrollHeight||800;
+        iframe.style.height=(h2+200)+'px';
+      },300);
+
+      setTimeout(function(){
+        var el=iDoc.body;
+        var txt=el.textContent||el.innerText||'';
+        if(txt.trim().length<10){
+          try{document.body.removeChild(iframe);}catch(x){}
+          reject(new Error('محتوى PDF فارغ'));
+          return;
+        }
+
+        var pageH=iDoc.body.scrollHeight||iDoc.documentElement.scrollHeight||1200;
+        iframe.style.height=(pageH+50)+'px';
+        var opt={
+          margin:[10,8,14,8],
+          filename: mode==='client'?'عرض-سعر-الزبون.pdf':'ملخص-الفريق-الداخلي.pdf',
+          image:{type:'jpeg',quality:0.97},
+          html2canvas:{
+            scale:2,
+            useCORS:true,
+            logging:false,
+            allowTaint:true,
+            backgroundColor:'#ffffff',
+            windowWidth:794,
+            windowHeight:pageH,
+            width:794,
+            height:pageH,
+            x:0,
+            y:0,
+            scrollX:0,
+            scrollY:0,
+            foreignObjectRendering:false,
+            removeContainer:true
+          },
+          jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+          pagebreak:{mode:['avoid-all','css'],before:'.page-break',avoid:['.summary-card','.quote-card','.pdf-header']}
+        };
+
+        html2pdf()
+          .set(opt)
+          .from(el)
+          .output('blob')
+          .then(function(blob){
+            try{document.body.removeChild(iframe);}catch(x){}
+            if(!blob||blob.size<2000){
+              reject(new Error('PDF فارغ — حاول مرة أخرى'));
+              return;
+            }
+            resolve(blob);
+          })
+          .catch(function(e){
+            try{document.body.removeChild(iframe);}catch(x){}
+            reject(e);
+          });
+      },800);
+    },1200);
+  });
+}
+
+function sendToCompanyBot(){
+  var btn=document.getElementById('tgSendBtn');
+  var status=document.getElementById('tgStatus');
+
+  // التحقق من وجود العرض أولاً
+  var ss=document.getElementById('summary-section');
+  if(!ss||!ss.classList.contains('active')){
+    if(status){status.textContent='⚠️ الرجاء إنشاء العرض أولاً';status.style.color='#e17055';}
+    return;
+  }
+
+  if(btn){btn.disabled=true;btn.textContent='⏳ (1/4) جاري إنشاء PDF الزبون...';}
+  if(status){status.textContent='⏳ جاري توليد الملفات، انتظر لحظة...';status.style.color='#229ed9';}
+
+  generatePdfBlob('client')
+  .then(function(clientBlob){
+    if(btn)btn.textContent='⏳ (2/4) جاري إنشاء PDF الداخلي...';
+    if(status)status.textContent='⏳ (2/4) PDF الزبون جاهز — جاري PDF الداخلي...';
+    return generatePdfBlob('internal').then(function(internalBlob){
+      return {c:clientBlob, i:internalBlob};
+    });
+  })
+  .then(function(blobs){
+    if(btn)btn.textContent='⏳ (3/4) جاري تجهيز ملف الـ Prompt...';
+    if(status)status.textContent='⏳ (3/4) الملفات جاهزة — جاري تجهيز الـ Prompt...';
+
+    // بناء payload
+    var P=window._pricing||{};
+    var pmTotal=document.getElementById('pmTotal');
+    var totalStr=pmTotal?pmTotal.textContent:'—';
+    var clientName=(val('clientName')!=='—'?val('clientName'):'زبون').replace(/\s+/g,'-');
+    var projName=(val('projName')!=='—'?val('projName'):'مشروع').replace(/\s+/g,'-');
+
+    var payloadStr=JSON.stringify({
+      clientName:val('clientName'),
+      clientPhone:val('clientPhone'),
+      clientEmail:val('clientEmail'),
+      clientCompany:val('clientCompany'),
+      projName:val('projName'),
+      projType:getSelected('projType'),
+      projDesc:val('projDesc'),
+      features:getSelected('features'),
+      techStack:getSelected('techStack'),
+      hosting:getSelected('hosting'),
+      priorities:getSelected('priorities'),
+      extraNotes:val('extraNotes'),
+      totalPrice:totalStr,
+      discount:P.discount?fmt(P.discount):'لا يوجد',
+      paymentPlan:getSelected('paymentPlan'),
+      deadline:getSelected('deadline'),
+      customFields:getCustomFields().map(function(f){return{label:f[0],value:f[1]};})
+    });
+
+    // بناء ملف نصي للـ Prompt
+    var promptText = document.getElementById('aiPrompt') ? document.getElementById('aiPrompt').textContent : (window._teamSummary||'');
+    var promptBlob = new Blob([promptText], {type:'text/plain;charset=utf-8'});
+    var promptFile = new File([promptBlob], 'prompt-'+clientName+'-'+projName+'.txt', {type:'text/plain'});
+
+    if(btn)btn.textContent='⏳ (4/4) جاري الإرسال للقناة...';
+    if(status)status.textContent='⏳ (4/4) جاري الإرسال...';
+
+    // بناء FormData
+    var fd=new FormData();
+    fd.append('data', payloadStr);
+    fd.append('pdf_client',  new File([blobs.c], clientName+'-'+projName+'-عرض-سعر.pdf',    {type:'application/pdf'}));
+    fd.append('pdf_internal',new File([blobs.i], 'ملخص-الفريق-الداخلي.pdf', {type:'application/pdf'}));
+    fd.append('prompt_file', promptFile);
+
+    return fetch(BACKEND_URL,{method:'POST',body:fd}).then(function(r){return r.json();});
+  })
+  .then(function(res){
+    if(btn){btn.disabled=false;btn.textContent='📤 إرسال تلقائي للقناة (ملخص + PDF الزبون + PDF الداخلي)';}
+    if(res.ok){
+      if(status){status.textContent='✅ تم! الرسالة + PDF الزبون + PDF الداخلي + ملف Prompt وصلوا للقناة';status.style.color='#00b894';}
+    }else{
+      var errMsg=(res.errors||[res.error||'خطأ غير معروف']).join(' | ');
+      if(status){status.textContent='⚠️ خطأ في الإرسال: '+errMsg;status.style.color='#e17055';}
+    }
+  })
+  .catch(function(e){
+    if(btn){btn.disabled=false;btn.textContent='📤 إرسال تلقائي للقناة (ملخص + PDF الزبون + PDF الداخلي + Prompt)';}
+    var msg=e&&e.message?e.message:'تعذر الإرسال';
+    if(status){status.textContent='⚠️ خطأ: '+msg;status.style.color='#e17055';}
+    console.error('sendToCompanyBot error:',e);
+  });
+}
+// ──────────────────────────────────────────────────────────
+
+function addCustomField(){
+  var c=document.getElementById('customFieldsContainer');if(!c)return;
+  var row=document.createElement('div');
+  row.className='custom-field-row';
+  row.style.cssText='display:flex;gap:8px;margin-bottom:8px;align-items:flex-start';
+  row.innerHTML='<input type="text" class="cf-label" placeholder="اسم العنصر (مثلاً: نظام حجز مواعيد)" style="flex:1"/>'+
+    '<input type="text" class="cf-value" placeholder="تفاصيل / سعر إضافي إن وجد" style="flex:1"/>'+
+    '<button type="button" class="btn btn-outline btn-sm" onclick="this.parentElement.remove()" style="flex-shrink:0">✕</button>';
+  c.appendChild(row);
+}
+function getCustomFields(){
+  var out=[];
+  document.querySelectorAll('.custom-field-row').forEach(function(r){
+    var l=r.querySelector('.cf-label').value.trim();
+    var v=r.querySelector('.cf-value').value.trim();
+    if(l)out.push([l,v||'✓']);
+  });
+  return out;
+}
+function customFieldsText(sep){
+  var f=getCustomFields();
+  if(!f.length)return'';
+  return f.map(function(x){return x[0]+(x[1]?' ('+x[1]+')':'');}).join(sep||', ');
+}
+function resetForm(){
+  var ss=document.getElementById('summary-section');if(ss)ss.classList.remove('active');
+  document.querySelectorAll('input[type=text],input[type=email],input[type=tel],input[type=number],textarea').forEach(function(i){i.value='';});
+  document.querySelectorAll('input[type=checkbox]').forEach(function(i){i.checked=false;});
+  document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('selected');});
+  document.querySelectorAll('.addon-item').forEach(function(a){a.classList.remove('active-addon');a.dataset.ap='0';});
+  var fsd=document.getElementById('f-specificDate');if(fsd)fsd.style.display='none';
+  var dv=document.getElementById('discountVal');if(dv)dv.value='';
+  var cf=document.getElementById('customFieldsContainer');if(cf)cf.innerHTML='';
+  discType='pct';
+  document.getElementById('discPctBtn').classList.add('active');
+  document.getElementById('discIQDBtn').classList.remove('active');
+  currency='IQD';
+  document.getElementById('btnIQD').classList.add('active');
+  document.getElementById('btnUSD').classList.remove('active');
+  priceBase=pricePages=priceFeats=priceAddons=0;manualOverride=false;manualIQD=0;payPlan=null;
+  recalcPrice();goToStep(0);
+}
+recalcPrice();updateProgress();
+</script>
+</body>
+</html>
